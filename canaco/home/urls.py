@@ -10,7 +10,7 @@ app_name = "home"
 
 urlpatterns = [
     path("", views.index, name="index"),
-    path("base/", views.base, name="base"),
+    
     path("contactanos/", views.contactanos, name="contactanos"),
     path("categoria/", views.categoria, name="categoria"),
     path("login/", views.login, name="login"),

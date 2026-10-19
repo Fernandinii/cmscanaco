@@ -1,11 +1,79 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>categoria</title>
-</head>
-<body>
-    
-</body>
-</html>
+﻿{% extends 'home/base.html' %}
+{% load static %}
+
+{% block title %}Canaco - Categoría{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <h1 class="mb-2">Categoría: Comercio</h1>
+        <p class="text-muted mb-5">Noticias y publicaciones de la categoría Comercio</p>
+
+        <div class="row">
+            <div class="col-lg-8 mb-5 mb-lg-0">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="blog-entry">
+                            <a href="{% url 'home:noticia' %}" class="img-link">
+                                <img src="{% static 'images/img_1_sq.jpg' %}" alt="Imagen" class="img-fluid rounded">
+                            </a>
+                            <span class="date">14 de abril, 2024</span>
+                            <h2><a href="{% url 'home:noticia' %}">El comercio minorista crece durante el primer trimestre</a></h2>
+                            <p>Los comercios afiliados reportan un crecimiento sostenido en sus ventas impulsado por las nuevas capacitaciones.</p>
+                            <p><a href="{% url 'home:noticia' %}" class="btn btn-sm btn-outline-primary">LEER MÁS</a></p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="blog-entry">
+                            <a href="{% url 'home:noticia' %}" class="img-link">
+                                <img src="{% static 'images/img_2_sq.jpg' %}" alt="Imagen" class="img-fluid rounded">
+                            </a>
+                            <span class="date">13 de abril, 2024</span>
+                            <h2><a href="{% url 'home:noticia' %}">Nuevos beneficios fiscales para los afiliados</a></h2>
+                            <p>La cámara gestiona incentivos que apoyan el crecimiento de los comercios afiliados en todo el país.</p>
+                            <p><a href="{% url 'home:noticia' %}" class="btn btn-sm btn-outline-primary">LEER MÁS</a></p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="blog-entry">
+                            <a href="{% url 'home:noticia' %}" class="img-link">
+                                <img src="{% static 'images/img_3_sq.jpg' %}" alt="Imagen" class="img-fluid rounded">
+                            </a>
+                            <span class="date">12 de abril, 2024</span>
+                            <h2><a href="{% url 'home:noticia' %}">Directorio de empresas: más categorías</a></h2>
+                            <p>Ampliamos el directorio de afiliados para que los clientes encuentren más fácilmente a tu negocio.</p>
+                            <p><a href="{% url 'home:noticia' %}" class="btn btn-sm btn-outline-primary">LEER MÁS</a></p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="blog-entry">
+                            <a href="{% url 'home:noticia' %}" class="img-link">
+                                <img src="{% static 'images/img_4_sq.jpg' %}" alt="Imagen" class="img-fluid rounded">
+                            </a>
+                            <span class="date">11 de abril, 2024</span>
+                            <h2><a href="{% url 'home:noticia' %}">Tendencias de venta del año</a></h2>
+                            <p>Herramientas digitales y estrategias que optimizan la operación diaria del comercio minorista.</p>
+                            <p><a href="{% url 'home:noticia' %}" class="btn btn-sm btn-outline-primary">LEER MÁS</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 sidebar">
+                <div class="card border-0 shadow-sm rounded-3">
+                    <div class="card-body p-4">
+                        <h5 class="card-title mb-4">Todas las categorías</h5>
+                        <ul class="list-unstyled mb-0">
+                            <li class="border-bottom py-2"><a href="{% url 'home:categoria' %}" class="text-decoration-none active"><i class="bi bi-bookmark-fill me-2 text-primary"></i>Comercio</a></li>
+                            <li class="border-bottom py-2"><a href="{% url 'home:categoria' %}" class="text-decoration-none"><i class="bi bi-bookmark me-2"></i>Negocios</a></li>
+                            <li class="border-bottom py-2"><a href="{% url 'home:categoria' %}" class="text-decoration-none"><i class="bi bi-bookmark me-2"></i>Capacitación</a></li>
+                            <li class="border-bottom py-2"><a href="{% url 'home:categoria' %}" class="text-decoration-none"><i class="bi bi-bookmark me-2"></i>Eventos</a></li>
+                            <li class="py-2"><a href="{% url 'home:categoria' %}" class="text-decoration-none"><i class="bi bi-bookmark me-2"></i>Comercio exterior</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

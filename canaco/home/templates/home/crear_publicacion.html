@@ -1,11 +1,85 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>crear publicación</title>
-</head>
-<body>
-    
-</body>
-</html>
+﻿{% extends 'home/base.html' %}
+{% load static %}
+
+{% block title %}Canaco - Crear Publicación{% endblock %}
+
+{% block extra_head %}
+<link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <h2 class="mb-4">Crear Publicación</h2>
+        <div class="row">
+            {% include 'partials/sidebar_backoffice.html' %}
+            <div class="col-lg-9">
+                <div class="card border-0 shadow-sm rounded-3">
+                    <div class="card-body p-4 p-md-5">
+                        <form action="#" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="titulo" class="form-label">Título</label>
+                                <input type="text" id="titulo" name="titulo" class="form-control" placeholder="Título de la publicación" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="resumen" class="form-label">Resumen</label>
+                                <textarea id="resumen" name="resumen" class="form-control" rows="3" placeholder="Breve resumen de la publicación"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="categoria" class="form-label">Categoría</label>
+                                <select id="categoria" name="categoria" class="form-select" required>
+                                    <option value="" selected disabled>Selecciona una categoría</option>
+                                    <option value="1">Comercio</option>
+                                    <option value="2">Negocios</option>
+                                    <option value="3">Capacitación</option>
+                                    <option value="4">Eventos</option>
+                                    <option value="5">Comercio exterior</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="portada" class="form-label">Imagen de portada</label>
+                                <input type="file" id="portada" name="portada" class="form-control" accept="image/*">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Contenido</label>
+                                <div id="editor" style="height: 250px;"></div>
+                                <input type="hidden" name="contenido" id="contenido">
+                            </div>
+                            <div class="mb-3">
+                                <label for="galeria" class="form-label">Galería de imágenes</label>
+                                <input type="file" id="galeria" name="galeria" class="form-control" accept="image/*" multiple>
+                            </div>
+                            <div class="mb-4">
+                                <label for="estado" class="form-label">Estado</label>
+                                <select id="estado" name="estado" class="form-select">
+                                    <option value="borrador">Borrador</option>
+                                    <option value="publicado">Publicado</option>
+                                </select>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-primary">GUARDAR PUBLICACIÓN</button>
+                                <a href="{% url 'home:crud_noticas' %}" class="btn btn-outline-secondary">CANCELAR</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}
+
+{% block extra_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+<script>
+    var quill = new Quill('#editor', {
+        theme: 'snow',
+        placeholder: 'Escribe el contenido de la publicación...'
+    });
+    var form = document.querySelector('form');
+    form.onsubmit = function () {
+        document.querySelector('#contenido').value = quill.root.innerHTML;
+    };
+</script>
+{% endblock %}

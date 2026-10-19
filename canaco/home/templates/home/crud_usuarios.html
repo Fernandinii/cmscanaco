@@ -1,11 +1,94 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>crud de usuarios</title>
-</head>
-<body>
-    
-</body>
-</html>
+﻿{% extends 'home/base.html' %}
+{% load static %}
+
+{% block title %}Canaco - Panel Usuarios{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <h2 class="mb-4">Panel Usuarios</h2>
+        <div class="row">
+            {% include 'partials/sidebar_backoffice.html' %}
+            <div class="col-lg-9">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-muted">Total: 4 usuarios</span>
+                    <a href="{% url 'home:crear_usuario' %}" class="btn btn-primary"><i class="bi bi-person-plus me-1"></i>CREAR USUARIO</a>
+                </div>
+                <div class="card border-0 shadow-sm rounded-3">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Usuario</th>
+                                        <th>Nombre</th>
+                                        <th>Correo</th>
+                                        <th>Rol</th>
+                                        <th>Estado</th>
+                                        <th class="text-center">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>admin</td>
+                                        <td>David Anderson Rodríguez</td>
+                                        <td>admin@canaco.com</td>
+                                        <td><span class="badge bg-primary">Administrador</span></td>
+                                        <td><span class="badge bg-success">Activo</span></td>
+                                        <td class="text-center text-nowrap">
+                                            <a href="{% url 'home:crear_usuario' %}" class="btn btn-sm btn-outline-secondary">EDITAR</a>
+                                            <button class="btn btn-sm btn-outline-warning">BLOQUEAR</button>
+                                            <button class="btn btn-sm btn-outline-danger">ELIMINAR</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>editor1</td>
+                                        <td>María López Sánchez</td>
+                                        <td>editor1@canaco.com</td>
+                                        <td><span class="badge bg-info text-dark">Editor</span></td>
+                                        <td><span class="badge bg-success">Activo</span></td>
+                                        <td class="text-center text-nowrap">
+                                            <a href="{% url 'home:crear_usuario' %}" class="btn btn-sm btn-outline-secondary">EDITAR</a>
+                                            <button class="btn btn-sm btn-outline-warning">BLOQUEAR</button>
+                                            <button class="btn btn-sm btn-outline-danger">ELIMINAR</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>colab1</td>
+                                        <td>Carlos Ramírez Luna</td>
+                                        <td>colab1@canaco.com</td>
+                                        <td><span class="badge bg-secondary">Colaborador</span></td>
+                                        <td><span class="badge bg-success">Activo</span></td>
+                                        <td class="text-center text-nowrap">
+                                            <a href="{% url 'home:crear_usuario' %}" class="btn btn-sm btn-outline-secondary">EDITAR</a>
+                                            <button class="btn btn-sm btn-outline-warning">BLOQUEAR</button>
+                                            <button class="btn btn-sm btn-outline-danger">ELIMINAR</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td>colab2</td>
+                                        <td>Ana García Torres</td>
+                                        <td>colab2@canaco.com</td>
+                                        <td><span class="badge bg-secondary">Colaborador</span></td>
+                                        <td><span class="badge bg-danger">Inactivo</span></td>
+                                        <td class="text-center text-nowrap">
+                                            <a href="{% url 'home:crear_usuario' %}" class="btn btn-sm btn-outline-secondary">EDITAR</a>
+                                            <button class="btn btn-sm btn-outline-warning">BLOQUEAR</button>
+                                            <button class="btn btn-sm btn-outline-danger">ELIMINAR</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

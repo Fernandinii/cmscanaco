@@ -1,11 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>cambiar contraseña</title>
-</head>
-<body>
-    
-</body>
-</html>
+﻿{% extends 'home/base.html' %}
+{% load static %}
+
+{% block title %}Canaco - Cambiar Contraseña{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <h2 class="mb-4">Cambiar Contraseña</h2>
+        <div class="row">
+            {% include 'partials/sidebar_backoffice.html' %}
+            <div class="col-lg-9">
+                <div class="card border-0 shadow-sm rounded-3">
+                    <div class="card-body p-4 p-md-5">
+                        <form action="#" method="post">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="actual" class="form-label">Contraseña actual</label>
+                                <input type="password" id="actual" name="actual" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="nueva" class="form-label">Nueva contraseña</label>
+                                <input type="password" id="nueva" name="nueva" class="form-control" required>
+                            </div>
+                            <div class="mb-4">
+                                <label for="confirmar" class="form-label">Confirmar contraseña</label>
+                                <input type="password" id="confirmar" name="confirmar" class="form-control" required>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-primary">ACTUALIZAR CONTRASEÑA</button>
+                                <a href="{% url 'home:perfil' %}" class="btn btn-outline-secondary">VOLVER A MI PERFIL</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

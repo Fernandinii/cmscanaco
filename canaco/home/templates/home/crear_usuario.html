@@ -1,11 +1,68 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>crear usuarios</title>
-</head>
-<body>
-    
-</body>
-</html>
+﻿{% extends 'home/base.html' %}
+{% load static %}
+
+{% block title %}Canaco - Crear Usuario{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <h2 class="mb-4">Crear Usuario</h2>
+        <div class="row">
+            {% include 'partials/sidebar_backoffice.html' %}
+            <div class="col-lg-9">
+                <div class="card border-0 shadow-sm rounded-3">
+                    <div class="card-body p-4 p-md-5">
+                        <form action="#" method="post">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="usuario" class="form-label">Usuario</label>
+                                <input type="text" id="usuario" name="usuario" class="form-control" placeholder="Nombre de usuario" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="correo" class="form-label">Correo</label>
+                                <input type="email" id="correo" name="correo" class="form-control" placeholder="tucorreo@ejemplo.com" required>
+                            </div>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-4">
+                                    <label for="nombre" class="form-label">Nombre</label>
+                                    <input type="text" id="nombre" name="nombre" class="form-control" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="paterno" class="form-label">Paterno</label>
+                                    <input type="text" id="paterno" name="paterno" class="form-control" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="materno" class="form-label">Materno</label>
+                                    <input type="text" id="materno" name="materno" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="rol" class="form-label">Rol</label>
+                                <select id="rol" name="rol" class="form-select" required>
+                                    <option value="colaborador">Colaborador</option>
+                                    <option value="editor">Editor</option>
+                                    <option value="administrador">Administrador</option>
+                                </select>
+                            </div>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <label for="contrasena" class="form-label">Contraseña</label>
+                                    <input type="password" id="contrasena" name="contrasena" class="form-control" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="confirmar" class="form-label">Confirmar contraseña</label>
+                                    <input type="password" id="confirmar" name="confirmar" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-primary">CREAR USUARIO</button>
+                                <a href="{% url 'home:crud_usuarios' %}" class="btn btn-outline-secondary">VOLVER A USUARIOS</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

@@ -1,11 +1,299 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index - Canaco</title>
-</head>
-<body>
-    <h1>Estas en la página index bienvenidos</h1>
-</body>
-</html>
+{% extends 'home/base.html' %}
+{% load static %}
+
+{% block title %}Canaco - Inicio{% endblock %}
+{% block description %}Portal de la Cámara Nacional de Comercio: noticias, ofertas y servicios para retailers y afiliados{% endblock %}
+
+{% block content %}
+<!-- Start retroy layout blog posts -->
+<section class="section bg-light">
+    <div class="container">
+        <div class="row align-items-stretch retro-layout">
+            <div class="col-md-4">
+                <a href="{% url 'home:noticia' %}" class="h-entry mb-30 v-height gradient">
+                    <div class="featured-img" style="background-image: url('{% static 'images/img_2_horizontal.jpg' %}');"></div>
+                    <div class="text">
+                        <span class="date">14 de abril, 2024</span>
+                        <h2>La cámara impulsa a los retailers con nuevos programas de capacitación</h2>
+                    </div>
+                </a>
+                <a href="{% url 'home:noticia' %}" class="h-entry v-height gradient">
+                    <div class="featured-img" style="background-image: url('{% static 'images/img_5_horizontal.jpg' %}');"></div>
+                    <div class="text">
+                        <span class="date">14 de abril, 2024</span>
+                        <h2>Cómo proteger los datos de tus clientes en la nube</h2>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a href="{% url 'home:noticia' %}" class="h-entry img-5 h-100 gradient">
+                    <div class="featured-img" style="background-image: url('{% static 'images/img_1_vertical.jpg' %}');"></div>
+                    <div class="text">
+                        <span class="date">14 de abril, 2024</span>
+                        <h2>El comercio minorista mexicano crece durante el primer trimestre</h2>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a href="{% url 'home:noticia' %}" class="h-entry mb-30 v-height gradient">
+                    <div class="featured-img" style="background-image: url('{% static 'images/img_3_horizontal.jpg' %}');"></div>
+                    <div class="text">
+                        <span class="date">14 de abril, 2024</span>
+                        <h2>Eventos y convenciones: fechas importantes del año</h2>
+                    </div>
+                </a>
+                <a href="{% url 'home:noticia' %}" class="h-entry v-height gradient">
+                    <div class="featured-img" style="background-image: url('{% static 'images/img_4_horizontal.jpg' %}');"></div>
+                    <div class="text">
+                        <span class="date">14 de abril, 2024</span>
+                        <h2>Tendencias de venta que todo afiliado debe conocer</h2>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End retroy layout blog posts -->
+
+<!-- Start posts-entry -->
+<section class="section posts-entry">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-sm-6">
+                <h2 class="posts-entry-title">Noticias</h2>
+            </div>
+            <div class="col-sm-6 text-sm-end"><a href="{% url 'home:noticia' %}" class="read-more">Ver todo</a></div>
+        </div>
+        <div class="row g-3">
+            <div class="col-md-9">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="blog-entry">
+                            <a href="{% url 'home:noticia' %}" class="img-link">
+                                <img src="{% static 'images/img_1_sq.jpg' %}" alt="Imagen" class="img-fluid">
+                            </a>
+                            <span class="date">14 de abril, 2024</span>
+                            <h2><a href="{% url 'home:noticia' %}">Nuevos beneficios fiscales para los afiliados</a></h2>
+                            <p>La cámara gestiona incentivos que apoyan el crecimiento de los comercios afiliados en todo el país.</p>
+                            <p><a href="{% url 'home:noticia' %}" class="btn btn-sm btn-outline-primary">Leer más</a></p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="blog-entry">
+                            <a href="{% url 'home:noticia' %}" class="img-link">
+                                <img src="{% static 'images/img_2_sq.jpg' %}" alt="Imagen" class="img-fluid">
+                            </a>
+                            <span class="date">14 de abril, 2024</span>
+                            <h2><a href="{% url 'home:noticia' %}">Directorio de empresas: ahora con más categorías</a></h2>
+                            <p>Ampliamos el directorio de afiliados para que los clientes encuentren más fácilmente a tu negocio.</p>
+                            <p><a href="{% url 'home:noticia' %}" class="btn btn-sm btn-outline-primary">Leer más</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled blog-entry-sm">
+                    <li>
+                        <span class="date">14 de abril, 2024</span>
+                        <h3><a href="{% url 'home:noticia' %}">El comercio exterior: guía práctica para exportar</a></h3>
+                        <p>Requisitos y documentación que necesitas para iniciar tus operaciones de exportación.</p>
+                        <p><a href="#" class="read-more">Continuar leyendo</a></p>
+                    </li>
+                    <li>
+                        <span class="date">14 de abril, 2024</span>
+                        <h3><a href="{% url 'home:noticia' %}">Información financiera actualizada del sector</a></h3>
+                        <p>Estudios y datos del sector comercial para tomar mejores decisiones de negocio.</p>
+                        <p><a href="#" class="read-more">Continuar leyendo</a></p>
+                    </li>
+                    <li>
+                        <span class="date">14 de abril, 2024</span>
+                        <h3><a href="{% url 'home:noticia' %}">La convención anual de retailers se acerca</a></h3>
+                        <p>Participa en la convención donde los afiliados comparten experiencias y hacen negocio.</p>
+                        <p><a href="#" class="read-more">Continuar leyendo</a></p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End posts-entry -->
+
+<!-- Start posts-entry -->
+<section class="section posts-entry posts-entry-sm bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-lg-3">
+                <div class="blog-entry">
+                    <a href="{% url 'home:noticia' %}" class="img-link">
+                        <img src="{% static 'images/img_1_horizontal.jpg' %}" alt="Imagen" class="img-fluid">
+                    </a>
+                    <span class="date">14 de abril, 2024</span>
+                    <h2><a href="{% url 'home:noticia' %}">Consejos para mejorar tu presencia en redes</a></h2>
+                    <p>Estrategias simples para que tu negocio llegue a más clientes.</p>
+                    <p><a href="#" class="read-more">Continuar leyendo</a></p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="blog-entry">
+                    <a href="{% url 'home:noticia' %}" class="img-link">
+                        <img src="{% static 'images/img_2_horizontal.jpg' %}" alt="Imagen" class="img-fluid">
+                    </a>
+                    <span class="date">14 de abril, 2024</span>
+                    <h2><a href="{% url 'home:noticia' %}">Emprendimiento: de la idea al registro formal</a></h2>
+                    <p>Pasos para dar de alta tu negocio en el padrón de la cámara.</p>
+                    <p><a href="#" class="read-more">Continuar leyendo</a></p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="blog-entry">
+                    <a href="{% url 'home:noticia' %}" class="img-link">
+                        <img src="{% static 'images/img_3_horizontal.jpg' %}" alt="Imagen" class="img-fluid">
+                    </a>
+                    <span class="date">14 de abril, 2024</span>
+                    <h2><a href="{% url 'home:noticia' %}">Negociación con proveedores: claves del éxito</a></h2>
+                    <p>Aprende a negociar mejores condiciones para tu comercio.</p>
+                    <p><a href="#" class="read-more">Continuar leyendo</a></p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="blog-entry">
+                    <a href="{% url 'home:noticia' %}" class="img-link">
+                        <img src="{% static 'images/img_4_horizontal.jpg' %}" alt="Imagen" class="img-fluid">
+                    </a>
+                    <span class="date">14 de abril, 2024</span>
+                    <h2><a href="{% url 'home:noticia' %}">Tecnología al servicio del punto de venta</a></h2>
+                    <p>Herramientas digitales que optimizan la operación diaria.</p>
+                    <p><a href="#" class="read-more">Continuar leyendo</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End posts-entry -->
+
+<!-- Start posts-entry -->
+<section class="section posts-entry">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-sm-6">
+                <h2 class="posts-entry-title">Categorías</h2>
+            </div>
+            <div class="col-sm-6 text-sm-end"><a href="{% url 'home:categoria' %}" class="read-more">Ver todo</a></div>
+        </div>
+        <div class="row g-3">
+            <div class="col-md-9 order-md-2">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="blog-entry">
+                            <a href="{% url 'home:categoria' %}" class="img-link">
+                                <img src="{% static 'images/img_1_sq.jpg' %}" alt="Imagen" class="img-fluid">
+                            </a>
+                            <span class="date">14 de abril, 2024</span>
+                            <h2><a href="{% url 'home:categoria' %}">Comercio: novedades del sector retail</a></h2>
+                            <p>Las historias más relevantes del comercio minorista en México.</p>
+                            <p><a href="{% url 'home:categoria' %}" class="btn btn-sm btn-outline-primary">Leer más</a></p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="blog-entry">
+                            <a href="{% url 'home:categoria' %}" class="img-link">
+                                <img src="{% static 'images/img_2_sq.jpg' %}" alt="Imagen" class="img-fluid">
+                            </a>
+                            <span class="date">14 de abril, 2024</span>
+                            <h2><a href="{% url 'home:categoria' %}">Negocios: historias de afiliados exitosos</a></h2>
+                            <p>Conoce a los retailers que han hecho crecer sus empresas con la cámara.</p>
+                            <p><a href="{% url 'home:categoria' %}" class="btn btn-sm btn-outline-primary">Leer más</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-unstyled blog-entry-sm">
+                    <li>
+                        <span class="date">14 de abril, 2024</span>
+                        <h3><a href="{% url 'home:categoria' %}">Capacitación: talleres del mes</a></h3>
+                        <p>Cursos en ventas, negociación y administración para afiliados.</p>
+                        <p><a href="#" class="read-more">Continuar leyendo</a></p>
+                    </li>
+                    <li>
+                        <span class="date">14 de abril, 2024</span>
+                        <h3><a href="{% url 'home:categoria' %}">Eventos: agenda de la cámara</a></h3>
+                        <p>Ferias, convenciones y encuentros del gremio comercial.</p>
+                        <p><a href="#" class="read-more">Continuar leyendo</a></p>
+                    </li>
+                    <li>
+                        <span class="date">14 de abril, 2024</span>
+                        <h3><a href="{% url 'home:categoria' %}">Comercio exterior: apoyo a exportadores</a></h3>
+                        <p>Gestión de requisitos y validación de documentos para exportar.</p>
+                        <p><a href="#" class="read-more">Continuar leyendo</a></p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End posts-entry -->
+
+<!-- Start posts-entry -->
+<div class="section">
+    <div class="container">
+
+        <div class="row mb-4">
+            <div class="col-sm-6">
+                <h2 class="posts-entry-title">Afiliados</h2>
+            </div>
+            <div class="col-sm-6 text-sm-end"><a href="{% url 'home:categoria' %}" class="read-more">Ver todo</a></div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-4 mb-4">
+                <div class="post-entry-alt">
+                    <a href="{% url 'home:noticia' %}" class="img-link"><img src="{% static 'images/img_7_horizontal.jpg' %}" alt="Imagen" class="img-fluid"></a>
+                    <div class="excerpt">
+                        <h2><a href="{% url 'home:noticia' %}">Historias de emprendimiento retail en México</a></h2>
+                        <div class="post-meta align-items-center text-left clearfix">
+                            <figure class="author-figure mb-0 me-3 float-start"><img src="{% static 'images/person_1.jpg' %}" alt="Imagen" class="img-fluid"></figure>
+                            <span class="d-inline-block mt-1">Por <a href="#">David Anderson</a></span>
+                            <span>&nbsp;-&nbsp; 19 de julio, 2023</span>
+                        </div>
+                        <p>Conoce a los afiliados que han transformado su negocio gracias a las herramientas y el apoyo de la cámara.</p>
+                        <p><a href="#" class="read-more">Continuar leyendo</a></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="post-entry-alt">
+                    <a href="{% url 'home:noticia' %}" class="img-link"><img src="{% static 'images/img_6_horizontal.jpg' %}" alt="Imagen" class="img-fluid"></a>
+                    <div class="excerpt">
+                        <h2><a href="{% url 'home:noticia' %}">La importancia de la capacitación continua</a></h2>
+                        <div class="post-meta align-items-center text-left clearfix">
+                            <figure class="author-figure mb-0 me-3 float-start"><img src="{% static 'images/person_2.jpg' %}" alt="Imagen" class="img-fluid"></figure>
+                            <span class="d-inline-block mt-1">Por <a href="#">David Anderson</a></span>
+                            <span>&nbsp;-&nbsp; 19 de julio, 2023</span>
+                        </div>
+                        <p>Los talleres de la cámara preparan a los comerciantes para los retos del mercado actual.</p>
+                        <p><a href="#" class="read-more">Continuar leyendo</a></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="post-entry-alt">
+                    <a href="{% url 'home:noticia' %}" class="img-link"><img src="{% static 'images/img_5_horizontal.jpg' %}" alt="Imagen" class="img-fluid"></a>
+                    <div class="excerpt">
+                        <h2><a href="{% url 'home:noticia' %}">Del comercio local al comercio exterior</a></h2>
+                        <div class="post-meta align-items-center text-left clearfix">
+                            <figure class="author-figure mb-0 me-3 float-start"><img src="{% static 'images/person_3.jpg' %}" alt="Imagen" class="img-fluid"></figure>
+                            <span class="d-inline-block mt-1">Por <a href="#">David Anderson</a></span>
+                            <span>&nbsp;-&nbsp; 19 de julio, 2023</span>
+                        </div>
+                        <p>El programa de comercio exterior acompaña a los retailers en su proceso de internacionalización.</p>
+                        <p><a href="#" class="read-more">Continuar leyendo</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- End posts-entry -->
+{% endblock %}

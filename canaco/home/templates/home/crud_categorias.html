@@ -1,11 +1,103 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>categorias</title>
-</head>
-<body>
-    
-</body>
-</html>
+﻿{% extends 'home/base.html' %}
+{% load static %}
+
+{% block title %}Canaco - Panel Categorías{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <h2 class="mb-4">Panel Categorías</h2>
+        <div class="row">
+            {% include 'partials/sidebar_backoffice.html' %}
+            <div class="col-lg-9">
+                <div class="card border-0 shadow-sm rounded-3 mb-4">
+                    <div class="card-body p-4">
+                        <h5 class="card-title mb-3">Nueva categoría</h5>
+                        <form action="#" method="post">
+                            {% csrf_token %}
+                            <div class="row g-2">
+                                <div class="col">
+                                    <input type="text" name="nombre" class="form-control" placeholder="Nombre de la categoría" required>
+                                </div>
+                                <div class="col-auto">
+                                    <button type="submit" class="btn btn-primary">AGREGAR</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-sm rounded-3">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Nombre</th>
+                                        <th>Registrado por</th>
+                                        <th>Fecha</th>
+                                        <th class="text-center">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Comercio</td>
+                                        <td>admin</td>
+                                        <td>01/04/2024</td>
+                                        <td class="text-center text-nowrap">
+                                            <a href="{% url 'home:editar_categoria' %}" class="btn btn-sm btn-outline-secondary">EDITAR</a>
+                                            <button class="btn btn-sm btn-outline-danger">ELIMINAR</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>Negocios</td>
+                                        <td>admin</td>
+                                        <td>02/04/2024</td>
+                                        <td class="text-center text-nowrap">
+                                            <a href="{% url 'home:editar_categoria' %}" class="btn btn-sm btn-outline-secondary">EDITAR</a>
+                                            <button class="btn btn-sm btn-outline-danger">ELIMINAR</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>Capacitación</td>
+                                        <td>editor1</td>
+                                        <td>05/04/2024</td>
+                                        <td class="text-center text-nowrap">
+                                            <a href="{% url 'home:editar_categoria' %}" class="btn btn-sm btn-outline-secondary">EDITAR</a>
+                                            <button class="btn btn-sm btn-outline-danger">ELIMINAR</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td>Eventos</td>
+                                        <td>admin</td>
+                                        <td>07/04/2024</td>
+                                        <td class="text-center text-nowrap">
+                                            <a href="{% url 'home:editar_categoria' %}" class="btn btn-sm btn-outline-secondary">EDITAR</a>
+                                            <button class="btn btn-sm btn-outline-danger">ELIMINAR</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>5</td>
+                                        <td>Comercio exterior</td>
+                                        <td>admin</td>
+                                        <td>10/04/2024</td>
+                                        <td class="text-center text-nowrap">
+                                            <a href="{% url 'home:editar_categoria' %}" class="btn btn-sm btn-outline-secondary">EDITAR</a>
+                                            <button class="btn btn-sm btn-outline-danger">ELIMINAR</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

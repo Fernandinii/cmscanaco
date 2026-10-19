@@ -1,0 +1,89 @@
+{% load static %}
+<footer class="site-footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="widget">
+                    <h3 class="mb-4">Acerca de</h3>
+                    <p>Portal de la Cámara Nacional de Comercio, donde los retailers publican sus ofertas y noticias del sector comercial.</p>
+                </div> <!-- /.widget -->
+                <div class="widget">
+                    <h3>Redes sociales</h3>
+                    <ul class="list-unstyled social">
+                        <li><a href="#"><span class="icon-instagram"></span></a></li>
+                        <li><a href="#"><span class="icon-twitter"></span></a></li>
+                        <li><a href="#"><span class="icon-facebook"></span></a></li>
+                        <li><a href="#"><span class="icon-linkedin"></span></a></li>
+                    </ul>
+                </div> <!-- /.widget -->
+            </div> <!-- /.col-lg-4 -->
+            <div class="col-lg-4 ps-lg-5">
+                <div class="widget">
+                    <h3 class="mb-4">Enlaces</h3>
+                    <ul class="list-unstyled float-start links">
+                        <li><a href="{% url 'home:index' %}">Inicio</a></li>
+                        <li><a href="{% url 'home:categoria' %}">Categorías</a></li>
+                        <li><a href="{% url 'home:noticia' %}">Noticias</a></li>
+                        <li><a href="{% url 'home:contactanos' %}">Contáctanos</a></li>
+                    </ul>
+                    <ul class="list-unstyled float-start links">
+                        <li><a href="{% url 'home:perfil' %}">Perfil</a></li>
+                        <li><a href="{% url 'home:crear_publicacion' %}">Crear publicación</a></li>
+                        <li><a href="{% url 'home:login' %}">Iniciar sesión</a></li>
+                        <li><a href="{% url 'home:sign_up' %}">Registrarse</a></li>
+                    </ul>
+                </div> <!-- /.widget -->
+            </div> <!-- /.col-lg-4 -->
+            <div class="col-lg-4">
+                <div class="widget">
+                    <h3 class="mb-4">Publicaciones recientes</h3>
+                    <div class="post-entry-footer">
+                        <ul>
+                            <li>
+                                <a href="{% url 'home:noticia' %}">
+                                    <img src="{% static 'images/img_1_sq.jpg' %}" alt="Imagen" class="me-4 rounded">
+                                    <div class="text">
+                                        <h4>Las tendencias del comercio minorista en México</h4>
+                                        <div class="post-meta">
+                                            <span class="mr-2">15 de marzo de 2024</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'home:noticia' %}">
+                                    <img src="{% static 'images/img_2_sq.jpg' %}" alt="Imagen" class="me-4 rounded">
+                                    <div class="text">
+                                        <h4>Nuevos beneficios para los afiliados de la cámara</h4>
+                                        <div class="post-meta">
+                                            <span class="mr-2">15 de marzo de 2024</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'home:noticia' %}">
+                                    <img src="{% static 'images/img_3_sq.jpg' %}" alt="Imagen" class="me-4 rounded">
+                                    <div class="text">
+                                        <h4>Capacitación en ventas y negociación para retailers</h4>
+                                        <div class="post-meta">
+                                            <span class="mr-2">15 de marzo de 2024</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+
+                </div> <!-- /.widget -->
+            </div> <!-- /.col-lg-4 -->
+        </div> <!-- /.row -->
+
+        <div class="row mt-5">
+            <div class="col-12 text-center">
+                <p>Copyright &copy;<script>document.write(new Date().getFullYear());</script> Cámara Nacional de Comercio. Todos los derechos reservados. &mdash; Template basado en <a href="https://untree.co">Blogy</a> de <a href="https://themewagon.com">ThemeWagon</a></p>
+            </div>
+        </div>
+    </div> <!-- /.container -->
+</footer> <!-- /.site-footer -->

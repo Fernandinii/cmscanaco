@@ -1,11 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>perfil</title>
-</head>
-<body>
-    
-</body>
-</html>
+﻿{% extends 'home/base.html' %}
+{% load static %}
+
+{% block title %}Canaco - Mi Perfil{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <h2 class="mb-4">Mi Perfil</h2>
+        <div class="row">
+            {% include 'partials/sidebar_backoffice.html' %}
+            <div class="col-lg-9">
+                <div class="card border-0 shadow-sm rounded-3">
+                    <div class="card-body p-4 p-md-5">
+                        <div class="text-center mb-4">
+                            <img src="{% static 'images/person_1.jpg' %}" alt="Avatar" class="img-fluid rounded-circle" style="width: 120px; height: 120px; object-fit: cover;">
+                        </div>
+                        <table class="table table-borderless align-middle mb-4">
+                            <tbody>
+                                <tr class="border-bottom">
+                                    <th class="text-muted" style="width: 35%;">Usuario</th>
+                                    <td>admin</td>
+                                </tr>
+                                <tr class="border-bottom">
+                                    <th class="text-muted">Nombre</th>
+                                    <td>David</td>
+                                </tr>
+                                <tr class="border-bottom">
+                                    <th class="text-muted">Paterno</th>
+                                    <td>Anderson</td>
+                                </tr>
+                                <tr class="border-bottom">
+                                    <th class="text-muted">Materno</th>
+                                    <td>Rodríguez</td>
+                                </tr>
+                                <tr>
+                                    <th class="text-muted">Correo electrónico</th>
+                                    <td>admin@canaco.com</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="text-end">
+                            <a href="{% url 'home:crud_perfil' %}" class="btn btn-primary">EDITAR MI PERFIL</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

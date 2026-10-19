@@ -1,11 +1,93 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>crud de comentarios</title>
-</head>
-<body>
-    
-</body>
-</html>
+﻿{% extends 'home/base.html' %}
+{% load static %}
+
+{% block title %}Canaco - Panel Comentarios{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <h2 class="mb-4">Panel Comentarios</h2>
+        <div class="row">
+            {% include 'partials/sidebar_backoffice.html' %}
+            <div class="col-lg-9">
+                <div class="card border-0 shadow-sm rounded-3">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Autor</th>
+                                        <th>Noticia</th>
+                                        <th>Fecha</th>
+                                        <th>Contenido</th>
+                                        <th>Estado</th>
+                                        <th class="text-center">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="text-nowrap">
+                                            <img src="{% static 'images/person_2.jpg' %}" alt="Avatar" class="rounded-circle me-2" style="width: 32px; height: 32px; object-fit: cover;">María López
+                                        </td>
+                                        <td>Comercio minorista crece</td>
+                                        <td class="text-nowrap">14/04/2024</td>
+                                        <td>Muy buena información, esperamos más talleres.</td>
+                                        <td><span class="badge bg-success">Aprobado</span></td>
+                                        <td class="text-center text-nowrap">
+                                            <button class="btn btn-sm btn-outline-success">APROBAR</button>
+                                            <button class="btn btn-sm btn-outline-warning">BLOQUEAR</button>
+                                            <button class="btn btn-sm btn-outline-danger">ELIMINAR</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-nowrap">
+                                            <img src="{% static 'images/person_3.jpg' %}" alt="Avatar" class="rounded-circle me-2" style="width: 32px; height: 32px; object-fit: cover;">Carlos Ramírez
+                                        </td>
+                                        <td>Beneficios fiscales</td>
+                                        <td class="text-nowrap">13/04/2024</td>
+                                        <td>Excelente noticia para el sector comercial.</td>
+                                        <td><span class="badge bg-warning text-dark">Pendiente</span></td>
+                                        <td class="text-center text-nowrap">
+                                            <button class="btn btn-sm btn-outline-success">APROBAR</button>
+                                            <button class="btn btn-sm btn-outline-warning">BLOQUEAR</button>
+                                            <button class="btn btn-sm btn-outline-danger">ELIMINAR</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-nowrap">
+                                            <img src="{% static 'images/person_4.jpg' %}" alt="Avatar" class="rounded-circle me-2" style="width: 32px; height: 32px; object-fit: cover;">Ana García
+                                        </td>
+                                        <td>Tendencias de venta</td>
+                                        <td class="text-nowrap">12/04/2024</td>
+                                        <td>Contenido muy claro y útil para los afiliados.</td>
+                                        <td><span class="badge bg-success">Aprobado</span></td>
+                                        <td class="text-center text-nowrap">
+                                            <button class="btn btn-sm btn-outline-success">APROBAR</button>
+                                            <button class="btn btn-sm btn-outline-warning">BLOQUEAR</button>
+                                            <button class="btn btn-sm btn-outline-danger">ELIMINAR</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-nowrap">
+                                            <img src="{% static 'images/person_5.jpg' %}" alt="Avatar" class="rounded-circle me-2" style="width: 32px; height: 32px; object-fit: cover;">Usuario4
+                                        </td>
+                                        <td>Convención anual</td>
+                                        <td class="text-nowrap">11/04/2024</td>
+                                        <td>Spam eliminado por moderación.</td>
+                                        <td><span class="badge bg-danger">Bloqueado</span></td>
+                                        <td class="text-center text-nowrap">
+                                            <button class="btn btn-sm btn-outline-success">APROBAR</button>
+                                            <button class="btn btn-sm btn-outline-warning">BLOQUEAR</button>
+                                            <button class="btn btn-sm btn-outline-danger">ELIMINAR</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}
