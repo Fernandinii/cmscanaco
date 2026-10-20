@@ -10,81 +10,78 @@
         <div class="row">
             <div class="col-lg-8 mb-5 mb-lg-0">
                 <article>
-                    <h1 class="mb-3">El comercio minorista mexicano crece durante el primer trimestre</h1>
+                    <h1 class="mb-3">{{ publicacion.titulo }}</h1>
 
                     <div class="post-meta mb-4 d-flex align-items-center flex-wrap gap-3">
                         <figure class="mb-0"><img src="{% static 'images/person_1.jpg' %}" alt="Autor" class="img-fluid rounded-circle" style="width: 48px; height: 48px; object-fit: cover;"></figure>
                         <div>
-                            <span class="d-block">Por <a href="#">David Anderson</a></span>
-                            <span class="text-muted small">14 de abril, 2024</span>
+                            <span class="d-block">Por {{ publicacion.autor.first_name|default:publicacion.autor.username|default:"Redacción" }}</span>
+                            <span class="text-muted small">{{ publicacion.createdat|date:"d \d\e F, Y" }}</span>
                         </div>
-                        <span class="badge bg-primary rounded-pill">Comercio</span>
-                        <span class="text-muted small"><i class="bi bi-eye me-1"></i>VISITAS: 100</span>
+                        {% if publicacion.categoria %}
+                        <span class="badge bg-primary rounded-pill">{{ publicacion.categoria.nombre }}</span>
+                        {% endif %}
+                        <span class="text-muted small"><i class="bi bi-eye me-1"></i>VISITAS: {{ publicacion.visitas }}</span>
                     </div>
 
                     <div class="featured-img mb-4">
+                        {% if publicacion.imagen_portada %}
+                        <img src="{{ publicacion.imagen_portada.display_url }}" alt="Noticia" class="img-fluid rounded">
+                        {% else %}
                         <img src="{% static 'images/img_1_vertical.jpg' %}" alt="Noticia" class="img-fluid rounded">
+                        {% endif %}
                     </div>
 
-                    <p class="lead">Los comercios afiliados a la cámara registraron un incremento en sus ventas durante el primer trimestre del año, impulsados por la recuperación del consumo y los nuevos programas de capacitación.</p>
+                    {% if publicacion.resumen %}
+                    <p class="lead">{{ publicacion.resumen }}</p>
+                    {% endif %}
 
-                    <p>El sector comercial mexicano muestra signos claros de recuperación. Durante los primeros tres meses del año, los establecimientos minoristas reportaron un crecimiento sostenido en sus ventas, comparado con el mismo periodo del año anterior.</p>
+                    <div class="post-body mb-4">
+                        {{ publicacion.contenido|safe }}
+                    </div>
 
-                    <p>Los programas de capacitación ofrecidos por la cámara a sus afiliados han sido determinantes en este desempeño, ya que permitieron a los comerciantes modernizar sus estrategias de venta, adoptar herramientas digitales y mejorar la experiencia de sus clientes.</p>
-
+                    {% if publicacion.galeria.all %}
                     <h3 class="mt-4 mb-3">Galería de imágenes</h3>
                     <div class="row g-2 mb-4">
-                        <div class="col-4"><img src="{% static 'images/img_1_sq.jpg' %}" alt="Galería 1" class="img-fluid rounded"></div>
-                        <div class="col-4"><img src="{% static 'images/img_2_sq.jpg' %}" alt="Galería 2" class="img-fluid rounded"></div>
-                        <div class="col-4"><img src="{% static 'images/img_3_sq.jpg' %}" alt="Galería 3" class="img-fluid rounded"></div>
-                        <div class="col-4"><img src="{% static 'images/img_4_sq.jpg' %}" alt="Galería 4" class="img-fluid rounded"></div>
-                        <div class="col-4"><img src="{% static 'images/img_5_sq.jpg' %}" alt="Galería 5" class="img-fluid rounded"></div>
-                        <div class="col-4"><img src="{% static 'images/img_6_sq.jpg' %}" alt="Galería 6" class="img-fluid rounded"></div>
+                        {% for item in publicacion.galeria.all %}
+                        <div class="col-4"><img src="{{ item.archivo.display_url }}" alt="{{ item.archivo.nombre }}" class="img-fluid rounded"></div>
+                        {% endfor %}
                     </div>
-
-                    <p>La cámara continuará apoyando a sus afiliados con talleres, estudios de mercado y gestiones ante las autoridades para fortalecer al sector comercial del país.</p>
+                    {% endif %}
                 </article>
 
                 <div class="comments mt-5 pt-4 border-top">
-                    <h3 class="mb-4">Comentarios (3)</h3>
+                    <h3 class="mb-4">Comentarios ({{ comentarios|length }})</h3>
 
                     <ul class="comment-list list-unstyled">
-                        <li class="comment">
+                        {% for comentario in comentarios %}
+                        <li class="comment{% if not forloop.first %} mt-4{% endif %}">
                             <div class="vcard mb-3">
                                 <img src="{% static 'images/person_2.jpg' %}" alt="Avatar" class="img-fluid rounded-circle" style="width: 48px; height: 48px; object-fit: cover;">
-                                <span class="author">María López</span>
-                                <span class="meta text-muted small ms-2">14 de abril, 2024</span>
+                                <span class="author">{{ comentario.user.username }}</span>
+                                <span class="meta text-muted small ms-2">{{ comentario.createdat|date:"d \d\e F, Y" }}</span>
                             </div>
-                            <p>Muy buena información. Esperamos más programas de capacitación para los afiliados.</p>
+                            <p>{{ comentario.contenido|linebreaksbr }}</p>
                         </li>
-                        <li class="comment mt-4">
-                            <div class="vcard mb-3">
-                                <img src="{% static 'images/person_3.jpg' %}" alt="Avatar" class="img-fluid rounded-circle" style="width: 48px; height: 48px; object-fit: cover;">
-                                <span class="author">Carlos Ramírez</span>
-                                <span class="meta text-muted small ms-2">13 de abril, 2024</span>
-                            </div>
-                            <p>Excelente noticia para el sector. El directorio de afiliados también ha mejorado mucho.</p>
-                        </li>
-                        <li class="comment mt-4">
-                            <div class="vcard mb-3">
-                                <img src="{% static 'images/person_4.jpg' %}" alt="Avatar" class="img-fluid rounded-circle" style="width: 48px; height: 48px; object-fit: cover;">
-                                <span class="author">Ana García</span>
-                                <span class="meta text-muted small ms-2">12 de abril, 2024</span>
-                            </div>
-                            <p>Gracias por mantenernos informados con datos tan claros y útiles.</p>
-                        </li>
+                        {% empty %}
+                        <li class="text-muted">Sé el primero en comentar esta noticia.</li>
+                        {% endfor %}
                     </ul>
 
                     <div class="comment-form-wrap mt-5 pt-4 border-top">
                         <h4 class="mb-3">Agregar comentario</h4>
-                        <form action="#" method="post">
+                        {% if request.user.is_authenticated %}
+                        <form action="{% url 'home:noticia_detalle' pk=publicacion.pk %}" method="post">
                             {% csrf_token %}
                             <div class="mb-3">
-                                <label for="comentario" class="form-label">Comentario</label>
-                                <textarea id="comentario" name="comentario" class="form-control" rows="4" placeholder="Escribe tu comentario..." required></textarea>
+                                <label for="contenido" class="form-label">Comentario</label>
+                                <textarea id="contenido" name="contenido" class="form-control" rows="4" placeholder="Escribe tu comentario..." required></textarea>
                             </div>
                             <button type="submit" class="btn btn-primary">Agregar comentario</button>
                         </form>
+                        {% else %}
+                        <p class="mb-0 text-muted">Inicia sesión para dejar tu comentario. <a href="{% url 'home:login' %}">Iniciar sesión</a></p>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -94,27 +91,21 @@
                     <div class="card-body p-4">
                         <h5 class="card-title mb-4">Otras noticias recientes</h5>
                         <ul class="list-unstyled mb-0">
-                            <li class="d-flex mb-3">
+                            {% for reciente in recientes %}
+                            <li class="d-flex mb-3{% if forloop.last %} mb-0{% endif %}">
+                                {% if reciente.imagen_portada %}
+                                <img src="{{ reciente.imagen_portada.display_url }}" alt="Noticia" class="img-fluid rounded me-3" style="width: 70px; height: 70px; object-fit: cover;">
+                                {% else %}
                                 <img src="{% static 'images/img_1_sq.jpg' %}" alt="Noticia" class="img-fluid rounded me-3" style="width: 70px; height: 70px; object-fit: cover;">
+                                {% endif %}
                                 <div>
-                                    <a href="{% url 'home:noticia' %}" class="fw-bold text-decoration-none">La cámara impulsa a los retailers con nuevos talleres</a>
-                                    <span class="d-block text-muted small">14 de abril, 2024</span>
+                                    <a href="{% url 'home:noticia_detalle' pk=reciente.pk %}" class="fw-bold text-decoration-none">{{ reciente.titulo }}</a>
+                                    <span class="d-block text-muted small">{{ reciente.createdat|date:"d \d\e F, Y" }}</span>
                                 </div>
                             </li>
-                            <li class="d-flex mb-3">
-                                <img src="{% static 'images/img_2_sq.jpg' %}" alt="Noticia" class="img-fluid rounded me-3" style="width: 70px; height: 70px; object-fit: cover;">
-                                <div>
-                                    <a href="{% url 'home:noticia' %}" class="fw-bold text-decoration-none">Cómo proteger los datos de tus clientes</a>
-                                    <span class="d-block text-muted small">13 de abril, 2024</span>
-                                </div>
-                            </li>
-                            <li class="d-flex">
-                                <img src="{% static 'images/img_3_sq.jpg' %}" alt="Noticia" class="img-fluid rounded me-3" style="width: 70px; height: 70px; object-fit: cover;">
-                                <div>
-                                    <a href="{% url 'home:noticia' %}" class="fw-bold text-decoration-none">Tendencias de venta que debes conocer</a>
-                                    <span class="d-block text-muted small">12 de abril, 2024</span>
-                                </div>
-                            </li>
+                            {% empty %}
+                            <li class="text-muted small">No hay otras noticias.</li>
+                            {% endfor %}
                         </ul>
                     </div>
                 </div>
@@ -123,11 +114,11 @@
                     <div class="card-body p-4">
                         <h5 class="card-title mb-4">Categorías</h5>
                         <ul class="list-unstyled mb-0">
-                            <li class="border-bottom py-2"><a href="{% url 'home:categoria' %}" class="text-decoration-none"><i class="bi bi-bookmark me-2"></i>Comercio</a></li>
-                            <li class="border-bottom py-2"><a href="{% url 'home:categoria' %}" class="text-decoration-none"><i class="bi bi-bookmark me-2"></i>Negocios</a></li>
-                            <li class="border-bottom py-2"><a href="{% url 'home:categoria' %}" class="text-decoration-none"><i class="bi bi-bookmark me-2"></i>Capacitación</a></li>
-                            <li class="border-bottom py-2"><a href="{% url 'home:categoria' %}" class="text-decoration-none"><i class="bi bi-bookmark me-2"></i>Eventos</a></li>
-                            <li class="py-2"><a href="{% url 'home:categoria' %}" class="text-decoration-none"><i class="bi bi-bookmark me-2"></i>Comercio exterior</a></li>
+                            {% for cat in categorias %}
+                            <li class="border-bottom py-2"><a href="{% url 'home:categoria_detalle' pk=cat.pk %}" class="text-decoration-none"><i class="bi bi-bookmark me-2"></i>{{ cat.nombre }}</a></li>
+                            {% empty %}
+                            <li class="text-muted small">No hay categorías.</li>
+                            {% endfor %}
                         </ul>
                     </div>
                 </div>

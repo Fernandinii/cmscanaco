@@ -12,28 +12,28 @@
             <div class="col-lg-9">
                 <div class="card border-0 shadow-sm rounded-3">
                     <div class="card-body p-4 p-md-5">
-                        <form action="#" method="post" enctype="multipart/form-data">
+                        <form action="{% url 'home:crud_perfil' %}" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="mb-3">
-                                <label for="usuario" class="form-label">Usuario</label>
-                                <input type="text" id="usuario" name="usuario" class="form-control" value="admin" required>
+                                <label for="username" class="form-label">Usuario</label>
+                                <input type="text" id="username" name="username" class="form-control" value="{{ request.user.username }}" required>
                             </div>
                             <div class="mb-3">
-                                <label for="correo" class="form-label">Correo</label>
-                                <input type="email" id="correo" name="correo" class="form-control" value="admin@canaco.com" required>
+                                <label for="email" class="form-label">Correo</label>
+                                <input type="email" id="email" name="email" class="form-control" value="{{ request.user.email }}" required>
                             </div>
                             <div class="row g-3 mb-3">
                                 <div class="col-md-4">
-                                    <label for="nombre" class="form-label">Nombre</label>
-                                    <input type="text" id="nombre" name="nombre" class="form-control" value="David" required>
+                                    <label for="first_name" class="form-label">Nombre</label>
+                                    <input type="text" id="first_name" name="first_name" class="form-control" value="{{ request.user.first_name }}" required>
                                 </div>
                                 <div class="col-md-4">
-                                    <label for="paterno" class="form-label">Paterno</label>
-                                    <input type="text" id="paterno" name="paterno" class="form-control" value="Anderson" required>
+                                    <label for="apellido_paterno" class="form-label">Paterno</label>
+                                    <input type="text" id="apellido_paterno" name="apellido_paterno" class="form-control" value="{{ perfil_usuario.apellido_paterno }}" required>
                                 </div>
                                 <div class="col-md-4">
-                                    <label for="materno" class="form-label">Materno</label>
-                                    <input type="text" id="materno" name="materno" class="form-control" value="Rodríguez" required>
+                                    <label for="apellido_materno" class="form-label">Materno</label>
+                                    <input type="text" id="apellido_materno" name="apellido_materno" class="form-control" value="{{ perfil_usuario.apellido_materno }}" required>
                                 </div>
                             </div>
                             <div class="mb-4">

@@ -1,0 +1,79 @@
+﻿{% extends 'home/base.html' %}
+{% load static %}
+
+{% block title %}Canaco - Panel Noticias{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <h2 class="mb-4">Panel Noticias</h2>
+        <div class="row">
+            {% include 'partials/sidebar_backoffice.html' %}
+            <div class="col-lg-9">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-muted">Total: {{ publicaciones|length }} publicaciones</span>
+                    <a href="{% url 'home:crear_publicacion' %}" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>CREAR PUBLICACIÓN</a>
+                </div>
+                <div class="card border-0 shadow-sm rounded-3">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Portada</th>
+                                        <th>Título</th>
+                                        <th>Autor</th>
+                                        <th>Fecha Creación</th>
+                                        <th>Fecha Actualización</th>
+                                        <th>Visitas</th>
+                                        <th>Status</th>
+                                        <th class="text-center">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for publicacion in publicaciones %}
+                                    <tr>
+                                        <td>
+                                            {% if publicacion.imagen_portada %}
+                                            <img src="{{ publicacion.imagen_portada.display_url }}" alt="Portada" class="rounded" style="width: 50px; height: 50px; object-fit: cover;">
+                                            {% else %}
+                                            <img src="{% static 'images/img_1_sq.jpg' %}" alt="Portada" class="rounded" style="width: 50px; height: 50px; object-fit: cover;">
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ publicacion.titulo }}</td>
+                                        <td>{{ publicacion.autor.username|default:"-" }}</td>
+                                        <td>{{ publicacion.createdat|date:"d/m/Y" }}</td>
+                                        <td>{{ publicacion.updatedat|date:"d/m/Y" }}</td>
+                                        <td>{{ publicacion.visitas }}</td>
+                                        <td>
+                                            {% if publicacion.estado == 'publicado' %}
+                                            <span class="badge bg-success">Publicado</span>
+                                            {% else %}
+                                            <span class="badge bg-secondary">Borrador</span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-center text-nowrap">
+                                            <a href="{% url 'home:noticia_detalle' pk=publicacion.pk %}" class="btn btn-sm btn-outline-primary">VER</a>
+                                            <a href="{% url 'home:editar_publicacion' pk=publicacion.pk %}" class="btn btn-sm btn-outline-secondary">EDITAR</a>
+                                            <a href="{% url 'home:publicar_publicacion' pk=publicacion.pk %}" class="btn btn-sm btn-outline-warning">PUBLICAR</a>
+                                            <form action="{% url 'home:eliminar_publicacion' pk=publicacion.pk %}" method="post" class="d-inline">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-sm btn-outline-danger">ELIMINAR</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="8" class="text-center text-muted py-4">No hay publicaciones.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

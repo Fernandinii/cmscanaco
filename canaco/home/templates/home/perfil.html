@@ -13,29 +13,33 @@
                 <div class="card border-0 shadow-sm rounded-3">
                     <div class="card-body p-4 p-md-5">
                         <div class="text-center mb-4">
+                            {% if perfil_usuario.foto_perfil %}
+                            <img src="{{ perfil_usuario.foto_perfil.display_url }}" alt="Avatar" class="img-fluid rounded-circle" style="width: 120px; height: 120px; object-fit: cover;">
+                            {% else %}
                             <img src="{% static 'images/person_1.jpg' %}" alt="Avatar" class="img-fluid rounded-circle" style="width: 120px; height: 120px; object-fit: cover;">
+                            {% endif %}
                         </div>
                         <table class="table table-borderless align-middle mb-4">
                             <tbody>
                                 <tr class="border-bottom">
                                     <th class="text-muted" style="width: 35%;">Usuario</th>
-                                    <td>admin</td>
+                                    <td>{{ request.user.username }}</td>
                                 </tr>
                                 <tr class="border-bottom">
                                     <th class="text-muted">Nombre</th>
-                                    <td>David</td>
+                                    <td>{{ request.user.first_name }}</td>
                                 </tr>
                                 <tr class="border-bottom">
                                     <th class="text-muted">Paterno</th>
-                                    <td>Anderson</td>
+                                    <td>{{ perfil_usuario.apellido_paterno }}</td>
                                 </tr>
                                 <tr class="border-bottom">
                                     <th class="text-muted">Materno</th>
-                                    <td>Rodríguez</td>
+                                    <td>{{ perfil_usuario.apellido_materno }}</td>
                                 </tr>
                                 <tr>
                                     <th class="text-muted">Correo electrónico</th>
-                                    <td>admin@canaco.com</td>
+                                    <td>{{ request.user.email }}</td>
                                 </tr>
                             </tbody>
                         </table>

@@ -12,11 +12,11 @@
             <div class="col-lg-9">
                 <div class="card border-0 shadow-sm rounded-3">
                     <div class="card-body p-4 p-md-5">
-                        <form action="#" method="post">
+                        <form action="{% url 'home:editar_categoria' pk=categoria.pk %}" method="post">
                             {% csrf_token %}
                             <div class="mb-4">
                                 <label for="nombre" class="form-label">Nombre de la categoría</label>
-                                <input type="text" id="nombre" name="nombre" class="form-control" value="Comercio" required>
+                                <input type="text" id="nombre" name="nombre" class="form-control" value="{{ categoria.nombre }}" required>
                             </div>
                             <div class="d-flex gap-2">
                                 <button type="submit" class="btn btn-primary">GUARDAR CAMBIOS</button>

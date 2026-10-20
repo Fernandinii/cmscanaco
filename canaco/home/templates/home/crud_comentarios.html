@@ -25,62 +25,37 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    {% for comentario in comentarios %}
                                     <tr>
                                         <td class="text-nowrap">
-                                            <img src="{% static 'images/person_2.jpg' %}" alt="Avatar" class="rounded-circle me-2" style="width: 32px; height: 32px; object-fit: cover;">María López
+                                            <img src="{% static 'images/person_2.jpg' %}" alt="Avatar" class="rounded-circle me-2" style="width: 32px; height: 32px; object-fit: cover;">{{ comentario.user.username }}
                                         </td>
-                                        <td>Comercio minorista crece</td>
-                                        <td class="text-nowrap">14/04/2024</td>
-                                        <td>Muy buena información, esperamos más talleres.</td>
-                                        <td><span class="badge bg-success">Aprobado</span></td>
+                                        <td>{{ comentario.publicacion.titulo }}</td>
+                                        <td class="text-nowrap">{{ comentario.createdat|date:"d/m/Y" }}</td>
+                                        <td>{{ comentario.contenido|truncatechars:80 }}</td>
+                                        <td>
+                                            {% if comentario.estado == 'aprobado' %}
+                                            <span class="badge bg-success">Aprobado</span>
+                                            {% elif comentario.estado == 'bloqueado' %}
+                                            <span class="badge bg-danger">Bloqueado</span>
+                                            {% else %}
+                                            <span class="badge bg-warning text-dark">Pendiente</span>
+                                            {% endif %}
+                                        </td>
                                         <td class="text-center text-nowrap">
-                                            <button class="btn btn-sm btn-outline-success">APROBAR</button>
-                                            <button class="btn btn-sm btn-outline-warning">BLOQUEAR</button>
-                                            <button class="btn btn-sm btn-outline-danger">ELIMINAR</button>
+                                            <a href="{% url 'home:aprobar_comentario' pk=comentario.pk %}" class="btn btn-sm btn-outline-success">APROBAR</a>
+                                            <a href="{% url 'home:bloquear_comentario' pk=comentario.pk %}" class="btn btn-sm btn-outline-warning">BLOQUEAR</a>
+                                            <form action="{% url 'home:eliminar_comentario' pk=comentario.pk %}" method="post" class="d-inline">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-sm btn-outline-danger">ELIMINAR</button>
+                                            </form>
                                         </td>
                                     </tr>
+                                    {% empty %}
                                     <tr>
-                                        <td class="text-nowrap">
-                                            <img src="{% static 'images/person_3.jpg' %}" alt="Avatar" class="rounded-circle me-2" style="width: 32px; height: 32px; object-fit: cover;">Carlos Ramírez
-                                        </td>
-                                        <td>Beneficios fiscales</td>
-                                        <td class="text-nowrap">13/04/2024</td>
-                                        <td>Excelente noticia para el sector comercial.</td>
-                                        <td><span class="badge bg-warning text-dark">Pendiente</span></td>
-                                        <td class="text-center text-nowrap">
-                                            <button class="btn btn-sm btn-outline-success">APROBAR</button>
-                                            <button class="btn btn-sm btn-outline-warning">BLOQUEAR</button>
-                                            <button class="btn btn-sm btn-outline-danger">ELIMINAR</button>
-                                        </td>
+                                        <td colspan="6" class="text-center text-muted py-4">No hay comentarios.</td>
                                     </tr>
-                                    <tr>
-                                        <td class="text-nowrap">
-                                            <img src="{% static 'images/person_4.jpg' %}" alt="Avatar" class="rounded-circle me-2" style="width: 32px; height: 32px; object-fit: cover;">Ana García
-                                        </td>
-                                        <td>Tendencias de venta</td>
-                                        <td class="text-nowrap">12/04/2024</td>
-                                        <td>Contenido muy claro y útil para los afiliados.</td>
-                                        <td><span class="badge bg-success">Aprobado</span></td>
-                                        <td class="text-center text-nowrap">
-                                            <button class="btn btn-sm btn-outline-success">APROBAR</button>
-                                            <button class="btn btn-sm btn-outline-warning">BLOQUEAR</button>
-                                            <button class="btn btn-sm btn-outline-danger">ELIMINAR</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-nowrap">
-                                            <img src="{% static 'images/person_5.jpg' %}" alt="Avatar" class="rounded-circle me-2" style="width: 32px; height: 32px; object-fit: cover;">Usuario4
-                                        </td>
-                                        <td>Convención anual</td>
-                                        <td class="text-nowrap">11/04/2024</td>
-                                        <td>Spam eliminado por moderación.</td>
-                                        <td><span class="badge bg-danger">Bloqueado</span></td>
-                                        <td class="text-center text-nowrap">
-                                            <button class="btn btn-sm btn-outline-success">APROBAR</button>
-                                            <button class="btn btn-sm btn-outline-warning">BLOQUEAR</button>
-                                            <button class="btn btn-sm btn-outline-danger">ELIMINAR</button>
-                                        </td>
-                                    </tr>
+                                    {% endfor %}
                                 </tbody>
                             </table>
                         </div>

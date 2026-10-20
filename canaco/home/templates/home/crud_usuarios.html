@@ -11,7 +11,7 @@
             {% include 'partials/sidebar_backoffice.html' %}
             <div class="col-lg-9">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <span class="text-muted">Total: 4 usuarios</span>
+                    <span class="text-muted">Total: {{ usuarios|length }} usuarios</span>
                     <a href="{% url 'home:crear_usuario' %}" class="btn btn-primary"><i class="bi bi-person-plus me-1"></i>CREAR USUARIO</a>
                 </div>
                 <div class="card border-0 shadow-sm rounded-3">
@@ -30,58 +30,42 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    {% for usuario in usuarios %}
                                     <tr>
-                                        <td>1</td>
-                                        <td>admin</td>
-                                        <td>David Anderson Rodríguez</td>
-                                        <td>admin@canaco.com</td>
-                                        <td><span class="badge bg-primary">Administrador</span></td>
-                                        <td><span class="badge bg-success">Activo</span></td>
+                                        <td>{{ usuario.pk }}</td>
+                                        <td>{{ usuario.username }}</td>
+                                        <td>{{ usuario.first_name }} {{ usuario.perfil.apellido_paterno }} {{ usuario.perfil.apellido_materno }}</td>
+                                        <td>{{ usuario.email|default:"-" }}</td>
+                                        <td>
+                                            {% if usuario.is_superuser %}
+                                            <span class="badge bg-primary">Administrador</span>
+                                            {% elif usuario.is_staff %}
+                                            <span class="badge bg-info text-dark">Editor</span>
+                                            {% else %}
+                                            <span class="badge bg-secondary">Colaborador</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if usuario.is_active %}
+                                            <span class="badge bg-success">Activo</span>
+                                            {% else %}
+                                            <span class="badge bg-danger">Inactivo</span>
+                                            {% endif %}
+                                        </td>
                                         <td class="text-center text-nowrap">
-                                            <a href="{% url 'home:crear_usuario' %}" class="btn btn-sm btn-outline-secondary">EDITAR</a>
-                                            <button class="btn btn-sm btn-outline-warning">BLOQUEAR</button>
-                                            <button class="btn btn-sm btn-outline-danger">ELIMINAR</button>
+                                            <a href="{% url 'home:editar_usuario' pk=usuario.pk %}" class="btn btn-sm btn-outline-secondary">EDITAR</a>
+                                            <a href="{% url 'home:bloquear_usuario' pk=usuario.pk %}" class="btn btn-sm btn-outline-warning">BLOQUEAR</a>
+                                            <form action="{% url 'home:eliminar_usuario' pk=usuario.pk %}" method="post" class="d-inline">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-sm btn-outline-danger" {% if usuario == request.user %}disabled{% endif %}>ELIMINAR</button>
+                                            </form>
                                         </td>
                                     </tr>
+                                    {% empty %}
                                     <tr>
-                                        <td>2</td>
-                                        <td>editor1</td>
-                                        <td>María López Sánchez</td>
-                                        <td>editor1@canaco.com</td>
-                                        <td><span class="badge bg-info text-dark">Editor</span></td>
-                                        <td><span class="badge bg-success">Activo</span></td>
-                                        <td class="text-center text-nowrap">
-                                            <a href="{% url 'home:crear_usuario' %}" class="btn btn-sm btn-outline-secondary">EDITAR</a>
-                                            <button class="btn btn-sm btn-outline-warning">BLOQUEAR</button>
-                                            <button class="btn btn-sm btn-outline-danger">ELIMINAR</button>
-                                        </td>
+                                        <td colspan="7" class="text-center text-muted py-4">No hay usuarios.</td>
                                     </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>colab1</td>
-                                        <td>Carlos Ramírez Luna</td>
-                                        <td>colab1@canaco.com</td>
-                                        <td><span class="badge bg-secondary">Colaborador</span></td>
-                                        <td><span class="badge bg-success">Activo</span></td>
-                                        <td class="text-center text-nowrap">
-                                            <a href="{% url 'home:crear_usuario' %}" class="btn btn-sm btn-outline-secondary">EDITAR</a>
-                                            <button class="btn btn-sm btn-outline-warning">BLOQUEAR</button>
-                                            <button class="btn btn-sm btn-outline-danger">ELIMINAR</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>colab2</td>
-                                        <td>Ana García Torres</td>
-                                        <td>colab2@canaco.com</td>
-                                        <td><span class="badge bg-secondary">Colaborador</span></td>
-                                        <td><span class="badge bg-danger">Inactivo</span></td>
-                                        <td class="text-center text-nowrap">
-                                            <a href="{% url 'home:crear_usuario' %}" class="btn btn-sm btn-outline-secondary">EDITAR</a>
-                                            <button class="btn btn-sm btn-outline-warning">BLOQUEAR</button>
-                                            <button class="btn btn-sm btn-outline-danger">ELIMINAR</button>
-                                        </td>
-                                    </tr>
+                                    {% endfor %}
                                 </tbody>
                             </table>
                         </div>

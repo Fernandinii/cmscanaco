@@ -33,6 +33,13 @@ class Archivo(models.Model):
     def __str__(self):
         return self.nombre
 
+    @property
+    def display_url(self):
+        ruta_str = str(self.ruta)
+        if ruta_str.startswith(('images/', 'css/', 'js/', 'fonts/', 'uploads/profile-default')):
+            return f'/static/{ruta_str}'
+        return self.ruta.url
+
 class Perfil(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     foto_perfil = models.ForeignKey(Archivo, null=True, blank=True, on_delete=models.SET_NULL)
@@ -95,4 +102,4 @@ class Comentario(models.Model):
         verbose_name_plural = 'Comentarios'
 
     def __str__(self):
-        return self.titulo
+        return self.contenido
