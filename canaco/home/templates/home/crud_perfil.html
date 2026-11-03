@@ -1,54 +1,72 @@
-﻿{% extends 'home/base.html' %}
+{% extends 'partials/sidebar_base.html' %}
 {% load static %}
-
-{% block title %}Canaco - Editar Mi Perfil{% endblock %}
+{% block title %}Editar Mi Perfil - Panel Admin{% endblock %}
 
 {% block content %}
-<section class="section">
-    <div class="container">
-        <h2 class="mb-4">Editar Mi Perfil</h2>
-        <div class="row">
-            {% include 'partials/sidebar_backoffice.html' %}
-            <div class="col-lg-9">
-                <div class="card border-0 shadow-sm rounded-3">
-                    <div class="card-body p-4 p-md-5">
-                        <form action="{% url 'home:crud_perfil' %}" method="post" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            <div class="mb-3">
-                                <label for="username" class="form-label">Usuario</label>
-                                <input type="text" id="username" name="username" class="form-control" value="{{ request.user.username }}" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Correo</label>
-                                <input type="email" id="email" name="email" class="form-control" value="{{ request.user.email }}" required>
-                            </div>
-                            <div class="row g-3 mb-3">
-                                <div class="col-md-4">
-                                    <label for="first_name" class="form-label">Nombre</label>
-                                    <input type="text" id="first_name" name="first_name" class="form-control" value="{{ request.user.first_name }}" required>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="apellido_paterno" class="form-label">Paterno</label>
-                                    <input type="text" id="apellido_paterno" name="apellido_paterno" class="form-control" value="{{ perfil_usuario.apellido_paterno }}" required>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="apellido_materno" class="form-label">Materno</label>
-                                    <input type="text" id="apellido_materno" name="apellido_materno" class="form-control" value="{{ perfil_usuario.apellido_materno }}" required>
-                                </div>
-                            </div>
-                            <div class="mb-4">
-                                <label for="foto" class="form-label">Foto</label>
-                                <input type="file" id="foto" name="foto" class="form-control">
-                            </div>
-                            <div class="d-flex gap-2">
-                                <button type="submit" class="btn btn-primary">GUARDAR CAMBIOS</button>
-                                <a href="{% url 'home:perfil' %}" class="btn btn-outline-secondary">CANCELAR</a>
-                            </div>
-                        </form>
-                    </div>
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="mb-4 pb-3 border-bottom">
+            <h1 class="h3 fw-bold mb-1" style="font-family: 'Playfair Display', serif;">Editar mi perfil</h1>
+            <p class="text-muted small mb-0">Actualiza tu información personal y fotografía de cuenta: <strong>{{ request.user.username }}</strong>.</p>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show rounded-3 shadow-sm" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="text-center mb-4">
+            {% if perfil_usuario.foto_perfil %}
+                <img src="{{ perfil_usuario.foto_perfil.display_url }}" alt="Foto de perfil" class="rounded-circle shadow-sm object-fit-cover" style="width: 120px; height: 120px;">
+            {% else %}
+                <img src="{% static 'uploads/profile-default.jpg' %}" alt="Foto de perfil" class="rounded-circle shadow-sm object-fit-cover" style="width: 120px; height: 120px;">
+            {% endif %}
+        </div>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label for="username" class="form-label small fw-medium">Usuario</label>
+                    <input type="text" id="username" name="username" class="form-control rounded-3" value="{{ request.user.username }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="email" class="form-label small fw-medium">Correo electrónico</label>
+                    <input type="email" id="email" name="email" class="form-control rounded-3" value="{{ request.user.email }}">
                 </div>
             </div>
-        </div>
+
+            <div class="mb-3">
+                <label for="first_name" class="form-label small fw-medium">Nombre</label>
+                <input type="text" id="first_name" name="first_name" class="form-control rounded-3" value="{{ request.user.first_name }}">
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label for="apellido_paterno" class="form-label small fw-medium">Apellido Paterno</label>
+                    <input type="text" id="apellido_paterno" name="apellido_paterno" class="form-control rounded-3" value="{{ perfil_usuario.apellido_paterno }}">
+                </div>
+                <div class="col-md-6">
+                    <label for="apellido_materno" class="form-label small fw-medium">Apellido Materno</label>
+                    <input type="text" id="apellido_materno" name="apellido_materno" class="form-control rounded-3" value="{{ perfil_usuario.apellido_materno }}">
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label for="foto" class="form-label small fw-medium">Actualizar fotografía</label>
+                <input type="file" id="foto" name="foto" class="form-control rounded-3">
+            </div>
+
+            <div class="d-flex justify-content-end gap-2">
+                <a href="{% url 'home:perfil' %}" class="btn btn-outline-secondary rounded-pill px-4">Cancelar</a>
+                <button type="submit" class="btn btn-primary rounded-pill px-4">Guardar cambios</button>
+            </div>
+        </form>
     </div>
-</section>
+</div>
 {% endblock content %}

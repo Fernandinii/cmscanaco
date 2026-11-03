@@ -1,0 +1,69 @@
+{% load static %}
+{% with current=request.resolver_match.url_name %}
+<div class="card border rounded-4 p-3 bg-dark text-white sticky-top shadow-sm" style="top: 90px; background-color: #0F172A !important;">
+    <div class="d-flex align-items-center mb-3 pb-3 border-bottom border-secondary px-2">
+        {% if global_perfil_usuario and global_perfil_usuario.foto_perfil %}
+            <img src="{{ global_perfil_usuario.foto_perfil.display_url }}" alt="Avatar" class="rounded-circle object-fit-cover me-2 border border-secondary" style="width: 42px; height: 42px;">
+        {% else %}
+            <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center me-2 fw-bold" style="width: 42px; height: 42px;">
+                {{ request.user.username|slice:":1"|upper }}
+            </div>
+        {% endif %}
+        <div style="overflow: hidden;">
+            <h6 class="mb-0 text-white fw-bold text-truncate">{{ request.user.username }}</h6>
+            <span class="text-white-50 small font-monospace">{% if request.user.is_staff %}Administrador{% else %}Usuario{% endif %}</span>
+        </div>
+    </div>
+
+    <nav class="nav flex-column gap-1">
+        <a href="{% url 'home:perfil' %}" class="nav-link rounded-3 py-2 px-3 d-flex align-items-center gap-2 {% if current == 'perfil' or current == 'crud_perfil' %}bg-white text-dark fw-bold shadow-xs{% else %}text-white-50 hover-text-white hover-bg-secondary{% endif %}">
+            <i class="bi bi-person-circle fs-5"></i>
+            <span>Mi Perfil</span>
+        </a>
+        
+        {% if request.user.is_staff %}
+        <a href="{% url 'home:crud_noticias' %}" class="nav-link rounded-3 py-2 px-3 d-flex align-items-center gap-2 {% if current == 'crud_noticias' or current == 'crear_publicacion' or current == 'editar_publicacion' %}bg-white text-dark fw-bold shadow-xs{% else %}text-white-50 hover-text-white hover-bg-secondary{% endif %}">
+            <i class="bi bi-journal-text fs-5"></i>
+            <span>Noticias</span>
+        </a>
+        
+        <a href="{% url 'home:crud_comentarios' %}" class="nav-link rounded-3 py-2 px-3 d-flex align-items-center gap-2 {% if current == 'crud_comentarios' %}bg-white text-dark fw-bold shadow-xs{% else %}text-white-50 hover-text-white hover-bg-secondary{% endif %}">
+            <i class="bi bi-chat-square-text fs-5"></i>
+            <span>Comentarios</span>
+        </a>
+        
+        <a href="{% url 'home:crud_categoria' %}" class="nav-link rounded-3 py-2 px-3 d-flex align-items-center gap-2 {% if current == 'crud_categoria' or current == 'editar_categoria' %}bg-white text-dark fw-bold shadow-xs{% else %}text-white-50 hover-text-white hover-bg-secondary{% endif %}">
+            <i class="bi bi-folder fs-5"></i>
+            <span>Categorías</span>
+        </a>
+        {% endif %}
+        
+        {% if request.user.is_superuser %}
+        <a href="{% url 'home:crud_usuario' %}" class="nav-link rounded-3 py-2 px-3 d-flex align-items-center gap-2 {% if current == 'crud_usuario' or current == 'crear_usuario' or current == 'editar_usuario' %}bg-white text-dark fw-bold shadow-xs{% else %}text-white-50 hover-text-white hover-bg-secondary{% endif %}">
+            <i class="bi bi-people fs-5"></i>
+            <span>Usuarios</span>
+        </a>
+        {% endif %}
+        
+        <a href="{% url 'home:crud_cambiar_contraseña' %}" class="nav-link rounded-3 py-2 px-3 d-flex align-items-center gap-2 {% if current == 'crud_cambiar_contraseña' %}bg-white text-dark fw-bold shadow-xs{% else %}text-white-50 hover-text-white hover-bg-secondary{% endif %}">
+            <i class="bi bi-shield-lock fs-5"></i>
+            <span>Contraseña</span>
+        </a>
+
+        <hr class="my-2 border-secondary">
+
+        <a href="{% url 'home:index' %}" class="nav-link rounded-3 py-2 px-3 d-flex align-items-center gap-2 text-white-50 hover-text-white">
+            <i class="bi bi-house fs-5"></i>
+            <span>Ver Sitio Web</span>
+        </a>
+
+        <form method="post" action="{% url 'home:logout' %}" class="mt-2">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-light w-100 rounded-pill py-2 d-flex align-items-center justify-content-center gap-2 fw-semibold">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Cerrar sesión</span>
+            </button>
+        </form>
+    </nav>
+</div>
+{% endwith %}

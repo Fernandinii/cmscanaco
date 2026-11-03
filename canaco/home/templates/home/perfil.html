@@ -1,55 +1,60 @@
-﻿{% extends 'home/base.html' %}
+{% extends 'partials/sidebar_base.html' %}
 {% load static %}
-
-{% block title %}Canaco - Mi Perfil{% endblock %}
+{% block title %}Mi Perfil - Canaco{% endblock %}
 
 {% block content %}
-<section class="section">
-    <div class="container">
-        <h2 class="mb-4">Mi Perfil</h2>
-        <div class="row">
-            {% include 'partials/sidebar_backoffice.html' %}
-            <div class="col-lg-9">
-                <div class="card border-0 shadow-sm rounded-3">
-                    <div class="card-body p-4 p-md-5">
-                        <div class="text-center mb-4">
-                            {% if perfil_usuario.foto_perfil %}
-                            <img src="{{ perfil_usuario.foto_perfil.display_url }}" alt="Avatar" class="img-fluid rounded-circle" style="width: 120px; height: 120px; object-fit: cover;">
-                            {% else %}
-                            <img src="{% static 'images/person_1.jpg' %}" alt="Avatar" class="img-fluid rounded-circle" style="width: 120px; height: 120px; object-fit: cover;">
-                            {% endif %}
-                        </div>
-                        <table class="table table-borderless align-middle mb-4">
-                            <tbody>
-                                <tr class="border-bottom">
-                                    <th class="text-muted" style="width: 35%;">Usuario</th>
-                                    <td>{{ request.user.username }}</td>
-                                </tr>
-                                <tr class="border-bottom">
-                                    <th class="text-muted">Nombre</th>
-                                    <td>{{ request.user.first_name }}</td>
-                                </tr>
-                                <tr class="border-bottom">
-                                    <th class="text-muted">Paterno</th>
-                                    <td>{{ perfil_usuario.apellido_paterno }}</td>
-                                </tr>
-                                <tr class="border-bottom">
-                                    <th class="text-muted">Materno</th>
-                                    <td>{{ perfil_usuario.apellido_materno }}</td>
-                                </tr>
-                                <tr>
-                                    <th class="text-muted">Correo electrónico</th>
-                                    <td>{{ request.user.email }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="text-end">
-                            <a href="{% url 'home:crud_perfil' %}" class="btn btn-primary">EDITAR MI PERFIL</a>
-                        </div>
+<div class="container my-2">
+    {% if messages %}
+        <div class="row mb-4">
+            <div class="col-12">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show rounded-3 shadow-sm" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
                     </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <div class="card shadow-sm border rounded-4 p-4 p-lg-5 bg-white text-center">
+                <div class="mb-4">
+                    {% if perfil_usuario.foto_perfil %}
+                        <img src="{{ perfil_usuario.foto_perfil.display_url }}" alt="Foto de perfil" class="rounded-circle shadow-xs object-fit-cover border" style="width: 130px; height: 130px;">
+                    {% else %}
+                        <img src="{% static 'uploads/profile-default.jpg' %}" alt="Foto por defecto" class="rounded-circle shadow-xs object-fit-cover border" style="width: 130px; height: 130px;">
+                    {% endif %}
+                </div>
+
+                <h2 class="fw-bold h3 mb-1" style="letter-spacing: -0.02em;">{{ request.user.username }}</h2>
+                <p class="text-muted small font-monospace mb-4">{{ request.user.email|default:"Sin correo registrado" }}</p>
+
+                <div class="row g-3 text-start mb-4 bg-light p-4 rounded-4 border">
+                    <div class="col-md-6">
+                        <span class="text-muted small d-block">Nombre</span>
+                        <strong class="text-dark">{{ request.user.first_name|default:"Sin registrar" }}</strong>
+                    </div>
+                    <div class="col-md-6">
+                        <span class="text-muted small d-block">Apellido Paterno</span>
+                        <strong class="text-dark">{{ perfil_usuario.apellido_paterno|default:"Sin registrar" }}</strong>
+                    </div>
+                    <div class="col-md-6 mt-3">
+                        <span class="text-muted small d-block">Apellido Materno</span>
+                        <strong class="text-dark">{{ perfil_usuario.apellido_materno|default:"Sin registrar" }}</strong>
+                    </div>
+                    <div class="col-md-6 mt-3">
+                        <span class="text-muted small d-block">Rol / Permisos</span>
+                        <strong class="text-dark">{% if request.user.is_staff %}Administrador / Operador{% else %}Usuario Estándar{% endif %}</strong>
+                    </div>
+                </div>
+
+                <div>
+                    <a href="{% url 'home:crud_perfil' %}" class="btn btn-dark rounded-pill px-4 py-2.5 fw-semibold shadow-xs">Editar mi perfil</a>
                 </div>
             </div>
         </div>
     </div>
-</section>
+</div>
 {% endblock content %}

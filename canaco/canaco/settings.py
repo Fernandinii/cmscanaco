@@ -117,7 +117,7 @@ USE_TZ = True
 
 
 LOGIN_URL = 'home:login'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = 'home:index'
 LOGOUT_REDIRECT_URL = 'home:login'
 
 # Static files (CSS, JavaScript, Images)

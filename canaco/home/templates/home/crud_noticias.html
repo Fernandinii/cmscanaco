@@ -1,79 +1,78 @@
-﻿{% extends 'home/base.html' %}
+{% extends 'partials/sidebar_base.html' %}
 {% load static %}
-
-{% block title %}Canaco - Panel Noticias{% endblock %}
+{% block title %}Noticias - Panel Admin{% endblock %}
 
 {% block content %}
-<section class="section">
-    <div class="container">
-        <h2 class="mb-4">Panel Noticias</h2>
-        <div class="row">
-            {% include 'partials/sidebar_backoffice.html' %}
-            <div class="col-lg-9">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <span class="text-muted">Total: {{ publicaciones|length }} publicaciones</span>
-                    <a href="{% url 'home:crear_publicacion' %}" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>CREAR PUBLICACIÓN</a>
-                </div>
-                <div class="card border-0 shadow-sm rounded-3">
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Portada</th>
-                                        <th>Título</th>
-                                        <th>Autor</th>
-                                        <th>Fecha Creación</th>
-                                        <th>Fecha Actualización</th>
-                                        <th>Visitas</th>
-                                        <th>Status</th>
-                                        <th class="text-center">Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for publicacion in publicaciones %}
-                                    <tr>
-                                        <td>
-                                            {% if publicacion.imagen_portada %}
-                                            <img src="{{ publicacion.imagen_portada.display_url }}" alt="Portada" class="rounded" style="width: 50px; height: 50px; object-fit: cover;">
-                                            {% else %}
-                                            <img src="{% static 'images/img_1_sq.jpg' %}" alt="Portada" class="rounded" style="width: 50px; height: 50px; object-fit: cover;">
-                                            {% endif %}
-                                        </td>
-                                        <td>{{ publicacion.titulo }}</td>
-                                        <td>{{ publicacion.autor.username|default:"-" }}</td>
-                                        <td>{{ publicacion.createdat|date:"d/m/Y" }}</td>
-                                        <td>{{ publicacion.updatedat|date:"d/m/Y" }}</td>
-                                        <td>{{ publicacion.visitas }}</td>
-                                        <td>
-                                            {% if publicacion.estado == 'publicado' %}
-                                            <span class="badge bg-success">Publicado</span>
-                                            {% else %}
-                                            <span class="badge bg-secondary">Borrador</span>
-                                            {% endif %}
-                                        </td>
-                                        <td class="text-center text-nowrap">
-                                            <a href="{% url 'home:noticia_detalle' pk=publicacion.pk %}" class="btn btn-sm btn-outline-primary">VER</a>
-                                            <a href="{% url 'home:editar_publicacion' pk=publicacion.pk %}" class="btn btn-sm btn-outline-secondary">EDITAR</a>
-                                            <a href="{% url 'home:publicar_publicacion' pk=publicacion.pk %}" class="btn btn-sm btn-outline-warning">PUBLICAR</a>
-                                            <form action="{% url 'home:eliminar_publicacion' pk=publicacion.pk %}" method="post" class="d-inline">
-                                                {% csrf_token %}
-                                                <button type="submit" class="btn btn-sm btn-outline-danger">ELIMINAR</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    {% empty %}
-                                    <tr>
-                                        <td colspan="8" class="text-center text-muted py-4">No hay publicaciones.</td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+<div class="d-flex align-items-center justify-content-between mb-4 pb-3 border-bottom">
+    <div>
+        <h1 class="h3 fw-bold mb-1" style="font-family: 'Playfair Display', serif;">Gestión de Noticias</h1>
+        <p class="text-muted small mb-0">Crea, edita, publica o elimina artículos y reportajes del portal.</p>
     </div>
-</section>
-{% endblock content %}
+    <a href="{% url 'home:crear_publicacion' %}" class="btn btn-primary rounded-pill px-4">
+        <i class="bi bi-plus-lg me-1"></i> Nueva publicación
+    </a>
+</div>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show rounded-3 shadow-sm" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+        <thead class="table-dark">
+            <tr>
+                <th class="py-3">Título</th>
+                <th class="py-3">Autor</th>
+                <th class="py-3">Creación</th>
+                <th class="py-3">Visitas</th>
+                <th class="py-3">Estado</th>
+                <th class="py-3 text-end">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for noticia in publicaciones %}
+                <tr>
+                    <td class="fw-medium text-dark" style="max-width: 280px;">
+                        <span class="text-truncate d-block">{{ noticia.titulo }}</span>
+                    </td>
+                    <td>{% if noticia.autor %}<span class="badge bg-light text-dark border">{{ noticia.autor.username }}</span>{% else %}<span class="text-muted">-</span>{% endif %}</td>
+                    <td class="text-muted small">{{ noticia.createdat|date:"Y-m-d" }}</td>
+                    <td><span class="badge bg-secondary bg-opacity-10 text-dark"><i class="bi bi-eye me-1"></i>{{ noticia.visitas }}</span></td>
+                    <td>
+                        {% if noticia.publicada %}
+                            <span class="badge bg-success rounded-pill px-3 py-1">Publicado</span>
+                        {% else %}
+                            <span class="badge bg-warning text-dark rounded-pill px-3 py-1">Borrador</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-end">
+                        <div class="d-flex justify-content-end gap-1">
+                            <a href="{% url 'home:noticia_detalle' noticia.id %}" class="btn btn-outline-dark btn-sm rounded-3" title="Ver"><i class="bi bi-eye"></i></a>
+                            <a href="{% url 'home:editar_publicacion' noticia.id %}" class="btn btn-outline-primary btn-sm rounded-3" title="Editar"><i class="bi bi-pencil"></i></a>
+                            <a href="{% url 'home:publicar_publicacion' noticia.id %}" class="btn btn-outline-success btn-sm rounded-3" title="Cambiar estado">
+                                {% if noticia.publicada %}<i class="bi bi-eye-slash"></i>{% else %}<i class="bi bi-upload"></i>{% endif %}
+                            </a>
+                            <form method="post" action="{% url 'home:eliminar_publicacion' noticia.id %}" class="d-inline" onsubmit="return confirm('¿Estás seguro de eliminar esta publicación?');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-danger btn-sm rounded-3" title="Eliminar"><i class="bi bi-trash"></i></button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center py-5 text-muted">
+                        <i class="bi bi-journal-x fs-2 d-block mb-2"></i>
+                        No hay publicaciones registradas.
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
