@@ -121,3 +121,28 @@ class Comentario(models.Model):
         verbose_name_plural = 'Comentarios'
 
 
+class ModalPromocional(models.Model):
+    titulo = models.CharField(max_length=180, default="¡Aviso Importante!")
+    etiqueta = models.CharField(max_length=60, default="Novedades", blank=True)
+    descripcion = models.TextField(blank=True, default="Consulta nuestros últimos comunicados y avisos oficiales.")
+    imagen = models.ForeignKey(
+        Archivo,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='modal_promocional',
+    )
+    activo = models.BooleanField(default=True)
+    createdat = models.DateTimeField(auto_now_add=True)
+    updatedat = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        managed = True
+        db_table = 'modal_promocional'
+        verbose_name_plural = 'Modal Promocional'
+
+    def __str__(self):
+        return f"{self.titulo} ({'Activo' if self.activo else 'Inactivo'})"
+
+
+

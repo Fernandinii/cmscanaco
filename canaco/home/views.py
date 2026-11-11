@@ -6,7 +6,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import update_session_auth_hash
 from django.core.files.storage import default_storage
 from django.db.models import F
-from .models import Archivo, Perfil, Categoria, Publicacion, GaleriaPublicacion, Comentario
+from .models import Archivo, Perfil, Categoria, Publicacion, GaleriaPublicacion, Comentario, ModalPromocional
+
 
 # Función para verificar si el usuario es operador / staff / activo
 def es_operador(user):
@@ -31,10 +32,14 @@ def index(request):
         estado=Publicacion.ESTADO_PUBLICADO,
     ).select_related('categoria', 'autor', 'imagen_portada').order_by('-createdat')
     
+    modal_promocional = ModalPromocional.objects.filter(activo=True).select_related('imagen').first()
+
     return render(request, 'home/index.html', {
         'slider': publicaciones[:3],
         'publicaciones': publicaciones[:3],
+        'modal_promocional': modal_promocional,
     })
+
 
 def base(request):
     return render(request, 'home/base.html')
@@ -587,3 +592,33 @@ def eliminar_publicacion(request, pk):
         publicacion.delete()
         messages.success(request, 'Publicación eliminada correctamente.')
     return redirect('home:crud_noticias') 
+
+
+@operador_required
+def crud_modal(request):
+    modal, created = ModalPromocional.objects.get_or_create(
+        defaults={
+            'titulo': '¡Aviso Importante!',
+            'etiqueta': 'Novedades',
+            'descripcion': 'Consulta nuestros últimos comunicados y avisos oficiales.',
+            'activo': True,
+        }
+    )
+
+    if request.method == 'POST':
+        modal.titulo = request.POST.get('titulo', '').strip()
+        modal.etiqueta = request.POST.get('etiqueta', '').strip()
+        modal.descripcion = request.POST.get('descripcion', '').strip()
+        modal.activo = request.POST.get('activo') == 'on'
+
+        imagen = request.FILES.get('imagen')
+        if imagen:
+            modal.imagen = guardar_archivo(imagen, request.user)
+
+        modal.save()
+        messages.success(request, 'Modal promocional actualizado correctamente.')
+        return redirect('home:crud_modal')
+
+    return render(request, 'home/crud_modal.html', {
+        'modal': modal,
+    })

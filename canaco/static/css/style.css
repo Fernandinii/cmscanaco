@@ -11018,3 +11018,17 @@ textarea {
   object-fit: cover;
   object-position: center;
 }
+
+/* Prevent text selection and focus outlines on header */
+.site-nav, .site-nav a, .site-nav button {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.site-nav a:focus, .site-nav button:focus, .site-nav a:active, .site-nav button:active {
+  outline: none !important;
+  box-shadow: none !important;
+}
+

@@ -1,0 +1,77 @@
+{% extends 'partials/sidebar_base.html' %}
+{% load static %}
+{% block title %}Modal Promocional - Panel Admin{% endblock %}
+
+{% block content %}
+<div class="mb-4 pb-3 border-bottom">
+    <h1 class="h3 fw-bold mb-1" style="font-family: 'Playfair Display', serif;">Gestión de Modal Promocional</h1>
+    <p class="text-muted small mb-0">Configura el aviso o imagen promocional que aparece automáticamente al visitar la página principal.</p>
+</div>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show rounded-3 shadow-sm" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label for="titulo" class="form-label fw-bold small text-uppercase">Título Principal</label>
+                    <input type="text" id="titulo" name="titulo" class="form-control rounded-3 py-2" value="{{ modal.titulo }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="etiqueta" class="form-label fw-bold small text-uppercase">Etiqueta / Badge</label>
+                    <input type="text" id="etiqueta" name="etiqueta" class="form-control rounded-3 py-2" value="{{ modal.etiqueta }}" placeholder="Ej. Novedades, Urgente, etc.">
+                </div>
+
+                <div class="mb-3">
+                    <label for="descripcion" class="form-label fw-bold small text-uppercase">Descripción / Texto</label>
+                    <textarea id="descripcion" name="descripcion" class="form-control rounded-3" rows="4" placeholder="Escribe el mensaje del modal...">{{ modal.descripcion }}</textarea>
+                </div>
+
+                <div class="mb-4">
+                    <label for="imagen" class="form-label fw-bold small text-uppercase">Imagen Adaptativa (Flyer / Poster)</label>
+                    <input type="file" id="imagen" name="imagen" class="form-control rounded-3 py-2" accept="image/*">
+                    <div class="form-text small text-muted mt-1">Sube una imagen vertical para que se adapte perfectamente al modal de la página principal.</div>
+                </div>
+
+                <div class="form-check form-switch mb-4">
+                    <input class="form-check-input" type="checkbox" id="activo" name="activo" {% if modal.activo %}checked{% endif %}>
+                    <label class="form-check-label fw-semibold" for="activo">Activar modal en la página principal</label>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2">
+                    <a href="{% url 'home:index' %}" class="btn btn-outline-secondary rounded-pill px-4 py-2" target="_blank">Ver en Sitio Web</a>
+                    <button type="submit" class="btn btn-dark rounded-pill px-4 py-2 fw-semibold">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm rounded-4 p-4 bg-light">
+            <h5 class="fw-bold mb-3 fs-6">Imagen Actual</h5>
+            {% if modal.imagen %}
+                <div class="rounded-3 overflow-hidden bg-white border mb-3 text-center p-2" style="max-height: 380px;">
+                    <img src="{{ modal.imagen.display_url }}" alt="{{ modal.titulo }}" class="img-fluid rounded-2 object-fit-contain w-100" style="max-height: 350px;">
+                </div>
+                <p class="text-muted small text-center mb-0 text-truncate">Archivo: {{ modal.imagen.nombre }}</p>
+            {% else %}
+                <div class="text-center py-5 text-muted bg-white rounded-3 border">
+                    <i class="bi bi-image fs-1 d-block mb-2"></i>
+                    <p class="small mb-0">No hay imagen cargada.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock content %}

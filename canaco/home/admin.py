@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Categoria, Archivo, Perfil, Publicacion, GaleriaPublicacion, Comentario
+from .models import Categoria, Archivo, Perfil, Publicacion, GaleriaPublicacion, Comentario, ModalPromocional
+
 
 
 @admin.register(Categoria)
@@ -39,3 +40,12 @@ class ComentarioAdmin(admin.ModelAdmin):
     list_display = ('publicacion', 'user', 'estado', 'createdat', 'updatedat')
     list_filter = ('estado', 'createdat')
     search_fields = ('contenido',)
+
+
+@admin.register(ModalPromocional)
+class ModalPromocionalAdmin(admin.ModelAdmin):
+    list_display = ('titulo', 'etiqueta', 'activo', 'updatedat')
+    list_filter = ('activo', 'createdat')
+    search_fields = ('titulo', 'descripcion')
+    readonly_fields = ('createdat', 'updatedat')
+

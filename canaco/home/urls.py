@@ -39,6 +39,7 @@ urlpatterns = [
     path("crud_categoria/", views.crud_categoria, name="crud_categoria"),
     path("crud_comentarios/", views.crud_comentarios, name="crud_comentarios"),
     path("crud_noticias/", views.crud_noticias, name="crud_noticias"),
+    path("crud_modal/", views.crud_modal, name="crud_modal"),
     path("editar_categoria/", views.editar_categoria, name="editar_categoria"),
 
     path("crud_categorias/<int:pk>/editar", views.editar_categoria, name="editar_categoria"),
