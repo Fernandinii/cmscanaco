@@ -1,4 +1,5 @@
 import os
+import json
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
@@ -6,6 +7,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth import update_session_auth_hash
 from django.core.files.storage import default_storage
 from django.db.models import F
+from django.http import JsonResponse
+from django.urls import reverse
+from django.utils import timezone
 from .models import Archivo, Perfil, Categoria, Publicacion, GaleriaPublicacion, Comentario, ModalPromocional
 
 
@@ -411,11 +415,37 @@ def crear_usuario(request):
 @operador_required
 def crud_categoria(request):
     if request.method == 'POST':
-        nombre = request.POST.get('nombre')
-        if nombre:
-            Categoria.objects.create(nombre=nombre, fk_user=request.user)
-            messages.success(request, 'Categoría agregada correctamente.')
+        nombre = ''
+        if request.content_type == 'application/json':
+            try:
+                data = json.loads(request.body)
+                nombre = data.get('nombre', '').strip()
+            except Exception:
+                nombre = ''
+        else:
+            nombre = request.POST.get('nombre', '').strip()
+
+        if not nombre:
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest' or request.content_type == 'application/json':
+                return JsonResponse({'success': False, 'error': 'El nombre de la categoría es obligatorio.'}, status=400)
+            messages.error(request, 'El nombre de la categoría es obligatorio.')
             return redirect('home:crud_categoria')
+
+        categoria = Categoria.objects.create(nombre=nombre, fk_user=request.user)
+        
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest' or request.content_type == 'application/json':
+            return JsonResponse({
+                'success': True,
+                'id': categoria.id,
+                'nombre': categoria.nombre,
+                'usuario': categoria.fk_user.username if categoria.fk_user else '-',
+                'fecha': categoria.createdat.strftime('%Y-%m-%d %H:%M'),
+                'url_editar': reverse('home:editar_categoria', args=[categoria.pk]),
+                'url_eliminar': reverse('home:eliminar_categoria', args=[categoria.pk]),
+            })
+
+        messages.success(request, 'Categoría agregada correctamente.')
+        return redirect('home:crud_categoria')
             
     categorias = Categoria.objects.all().order_by('-createdat')
     return render(request, 'home/crud_categoria.html', {'categorias': categorias})
@@ -424,12 +454,44 @@ def crud_categoria(request):
 def editar_categoria(request, pk):
     categoria = get_object_or_404(Categoria, pk=pk)
     if request.method == 'POST':
-        nombre = request.POST.get('nombre', '').strip()
-        if nombre:
-            categoria.nombre = nombre
-            categoria.save()
-            messages.success(request, 'Categoría actualizada correctamente.')
+        nombre = ''
+        if request.content_type == 'application/json':
+            try:
+                data = json.loads(request.body)
+                nombre = data.get('nombre', '').strip()
+            except Exception:
+                nombre = ''
+        else:
+            nombre = request.POST.get('nombre', '').strip()
+
+        if not nombre:
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest' or request.content_type == 'application/json':
+                return JsonResponse({'success': False, 'error': 'El nombre de la categoría es obligatorio.'}, status=400)
+            messages.error(request, 'El nombre es obligatorio.')
             return redirect('home:crud_categoria')
+
+        categoria.nombre = nombre
+        categoria.updatedat = timezone.now()
+        categoria.save()
+
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest' or request.content_type == 'application/json':
+            return JsonResponse({
+                'success': True,
+                'id': categoria.id,
+                'nombre': categoria.nombre,
+                'usuario': categoria.fk_user.username if categoria.fk_user else '-',
+                'fecha': (categoria.updatedat or categoria.createdat).strftime('%Y-%m-%d %H:%M')
+            })
+
+        messages.success(request, 'Categoría actualizada correctamente.')
+        return redirect('home:crud_categoria')
+
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return JsonResponse({
+            'id': categoria.id,
+            'nombre': categoria.nombre
+        })
+
     return render(request, 'home/editar_categoria.html', {'categoria': categoria})
 
 @operador_required
@@ -437,8 +499,11 @@ def eliminar_categoria(request, pk):
     categoria = get_object_or_404(Categoria, pk=pk)
     if request.method == 'POST':
         categoria.delete()
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest' or request.content_type == 'application/json':
+            return JsonResponse({'success': True, 'id': pk})
         messages.success(request, 'Categoría eliminada correctamente.')
         return redirect('home:crud_categoria')
+    return JsonResponse({'success': False, 'error': 'Método no permitido.'}, status=405)
 
 @operador_required
 def crud_comentarios(request):

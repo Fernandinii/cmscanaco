@@ -17,15 +17,18 @@
     {% endfor %}
 {% endif %}
 
+<div id="alertasCategorias" aria-live="polite"></div>
+
 <div class="card border-0 shadow-sm rounded-4 bg-light mb-4 p-4">
-    <h3 class="h6 fw-bold mb-3">Agregar nueva categoría</h3>
-    <form method="POST" class="row g-3">
+    <h3 id="formTitulo" class="h6 fw-bold mb-3">Agregar nueva categoría</h3>
+    <form id="formCategoria" method="POST" action="{% url 'home:crud_categoria' %}" class="row g-3">
         {% csrf_token %}
         <div class="col-md-9">
-            <input type="text" name="nombre" class="form-control rounded-3 py-2" placeholder="Nombre de la categoría..." required>
+            <input type="text" id="inputNombre" name="nombre" class="form-control rounded-3 py-2" placeholder="Nombre de la categoría..." maxlength="60" autocomplete="off" required>
         </div>
-        <div class="col-md-3 d-grid">
-            <button type="submit" class="btn btn-primary rounded-pill py-2">Agregar</button>
+        <div class="col-md-3 d-flex gap-2">
+            <button type="submit" id="btnSubmit" class="btn btn-primary rounded-pill py-2 flex-fill">Agregar</button>
+            <button type="button" id="btnCancelar" class="btn btn-outline-secondary rounded-pill py-2 flex-fill d-none">Cancelar</button>
         </div>
     </form>
 </div>
@@ -41,32 +44,281 @@
                 <th class="py-3 text-end">Acciones</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="tbodyCategorias">
             {% for categoria in categorias %}
-                <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td class="fw-bold text-dark">{{ categoria.nombre }}</td>
-                    <td><span class="badge bg-light text-dark border">{% if categoria.fk_user %}{{ categoria.fk_user.username }}{% else %}-{% endif %}</span></td>
-                    <td class="text-muted small">{{ categoria.createdat|date:"Y-m-d H:i" }}</td>
+                <tr data-id="{{ categoria.id }}" data-nombre="{{ categoria.nombre }}"
+                    data-url-editar="{% url 'home:editar_categoria' categoria.id %}"
+                    data-url-eliminar="{% url 'home:eliminar_categoria' categoria.id %}">
+                    <td class="js-num">{{ forloop.counter }}</td>
+                    <td class="fw-bold text-dark js-nombre">{{ categoria.nombre }}</td>
+                    <td><span class="badge bg-light text-dark border js-usuario">{% if categoria.fk_user %}{{ categoria.fk_user.username }}{% else %}-{% endif %}</span></td>
+                    <td class="text-muted small js-fecha">{{ categoria.createdat|date:"Y-m-d H:i" }}</td>
                     <td class="text-end">
                         <div class="d-flex justify-content-end gap-1">
-                            <a href="{% url 'home:editar_categoria' categoria.id %}" class="btn btn-outline-primary btn-sm rounded-3" title="Editar"><i class="bi bi-pencil"></i></a>
-                            <form method="post" action="{% url 'home:eliminar_categoria' categoria.id %}" class="d-inline" onsubmit="return confirm('¿Eliminar esta categoría?');">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-outline-danger btn-sm rounded-3" title="Eliminar"><i class="bi bi-trash"></i></button>
-                            </form>
+                            <button type="button" class="btn btn-outline-primary btn-sm rounded-3 btn-editar" title="Editar"><i class="bi bi-pencil"></i></button>
+                            <button type="button" class="btn btn-outline-danger btn-sm rounded-3 btn-eliminar" title="Eliminar"><i class="bi bi-trash"></i></button>
                         </div>
                     </td>
                 </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="5" class="text-center py-5 text-muted">
-                        <i class="bi bi-folder-x fs-2 d-block mb-2"></i>
-                        No hay categorías aún.
-                    </td>
-                </tr>
             {% endfor %}
+            <tr id="filaVacia" class="{% if categorias %}d-none{% endif %}">
+                <td colspan="5" class="text-center py-5 text-muted">
+                    <i class="bi bi-folder-x fs-2 d-block mb-2"></i>
+                    No hay categorías aún.
+                </td>
+            </tr>
         </tbody>
     </table>
 </div>
 {% endblock content %}
+
+{% block extra_js %}
+<script>
+(function () {
+    'use strict';
+
+    const form = document.getElementById('formCategoria');
+    const inputNombre = document.getElementById('inputNombre');
+    const btnSubmit = document.getElementById('btnSubmit');
+    const btnCancelar = document.getElementById('btnCancelar');
+    const formTitulo = document.getElementById('formTitulo');
+    const tbody = document.getElementById('tbodyCategorias');
+    const filaVacia = document.getElementById('filaVacia');
+    const contenedorAlertas = document.getElementById('alertasCategorias');
+
+    let modoEdicion = false;
+    let filaEditando = null;
+
+    function getCookie(name) {
+        const valor = document.cookie
+            .split(';')
+            .map(c => c.trim())
+            .find(c => c.startsWith(name + '='));
+        return valor ? decodeURIComponent(valor.split('=').slice(1).join('=')) : '';
+    }
+
+    function cabecerasJSON() {
+        return {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRFToken': getCookie('csrftoken'),
+        };
+    }
+
+    function mostrarAlerta(mensaje, tipo) {
+        tipo = tipo || 'success';
+        const alerta = document.createElement('div');
+        alerta.className = 'alert alert-' + tipo + ' alert-dismissible fade show rounded-3 shadow-sm';
+        alerta.setAttribute('role', 'alert');
+
+        const texto = document.createElement('span');
+        texto.textContent = mensaje;
+        alerta.appendChild(texto);
+
+        const cerrar = document.createElement('button');
+        cerrar.type = 'button';
+        cerrar.className = 'btn-close';
+        cerrar.setAttribute('data-bs-dismiss', 'alert');
+        cerrar.setAttribute('aria-label', 'Cerrar');
+        alerta.appendChild(cerrar);
+
+        contenedorAlertas.appendChild(alerta);
+        window.setTimeout(function () {
+            if (alerta.isConnected) {
+                alerta.classList.remove('show');
+                window.setTimeout(function () { alerta.remove(); }, 150);
+            }
+        }, 4000);
+    }
+
+    function reenumerar() {
+        const filas = tbody.querySelectorAll('tr[data-id]');
+        filas.forEach(function (fila, indice) {
+            const celda = fila.querySelector('.js-num');
+            if (celda) celda.textContent = indice + 1;
+        });
+        if (filaVacia) filaVacia.classList.toggle('d-none', filas.length > 0);
+    }
+
+    function crearFila(datos) {
+        const fila = document.createElement('tr');
+        fila.dataset.id = datos.id;
+        fila.dataset.nombre = datos.nombre;
+        fila.dataset.urlEditar = datos.url_editar;
+        fila.dataset.urlEliminar = datos.url_eliminar;
+
+        const tdNum = document.createElement('td');
+        tdNum.className = 'js-num';
+
+        const tdNombre = document.createElement('td');
+        tdNombre.className = 'fw-bold text-dark js-nombre';
+        tdNombre.textContent = datos.nombre;
+
+        const tdUsuario = document.createElement('td');
+        const badge = document.createElement('span');
+        badge.className = 'badge bg-light text-dark border js-usuario';
+        badge.textContent = datos.usuario || '-';
+        tdUsuario.appendChild(badge);
+
+        const tdFecha = document.createElement('td');
+        tdFecha.className = 'text-muted small js-fecha';
+        tdFecha.textContent = datos.fecha;
+
+        const tdAcciones = document.createElement('td');
+        tdAcciones.className = 'text-end';
+        const grupo = document.createElement('div');
+        grupo.className = 'd-flex justify-content-end gap-1';
+
+        const btnEditar = document.createElement('button');
+        btnEditar.type = 'button';
+        btnEditar.className = 'btn btn-outline-primary btn-sm rounded-3 btn-editar';
+        btnEditar.title = 'Editar';
+        btnEditar.innerHTML = '<i class="bi bi-pencil"></i>';
+
+        const btnEliminar = document.createElement('button');
+        btnEliminar.type = 'button';
+        btnEliminar.className = 'btn btn-outline-danger btn-sm rounded-3 btn-eliminar';
+        btnEliminar.title = 'Eliminar';
+        btnEliminar.innerHTML = '<i class="bi bi-trash"></i>';
+
+        grupo.appendChild(btnEditar);
+        grupo.appendChild(btnEliminar);
+        tdAcciones.appendChild(grupo);
+
+        fila.appendChild(tdNum);
+        fila.appendChild(tdNombre);
+        fila.appendChild(tdUsuario);
+        fila.appendChild(tdFecha);
+        fila.appendChild(tdAcciones);
+
+        return fila;
+    }
+
+    function entrarModoEdicion(fila) {
+        modoEdicion = true;
+        filaEditando = fila;
+
+        inputNombre.value = fila.dataset.nombre;
+        inputNombre.focus();
+        inputNombre.select();
+
+        btnSubmit.textContent = 'Actualizar';
+        btnCancelar.classList.remove('d-none');
+        formTitulo.textContent = 'Editar categoría';
+    }
+
+    function salirModoEdicion() {
+        modoEdicion = false;
+        filaEditando = null;
+
+        form.reset();
+        inputNombre.value = '';
+        btnSubmit.textContent = 'Agregar';
+        btnCancelar.classList.add('d-none');
+        formTitulo.textContent = 'Agregar nueva categoría';
+    }
+
+    async function manejarEnvio(evento) {
+        evento.preventDefault();
+
+        const nombre = inputNombre.value.trim();
+        if (!nombre) {
+            mostrarAlerta('El nombre de la categoría es obligatorio.', 'warning');
+            inputNombre.focus();
+            return;
+        }
+
+        btnSubmit.disabled = true;
+        btnSubmit.textContent = modoEdicion ? 'Actualizando...' : 'Agregando...';
+
+        try {
+            const url = modoEdicion ? filaEditando.dataset.urlEditar : form.action;
+            const respuesta = await fetch(url, {
+                method: 'POST',
+                headers: cabecerasJSON(),
+                credentials: 'same-origin',
+                body: JSON.stringify({ nombre: nombre }),
+            });
+
+            const datos = await respuesta.json().catch(function () { return {}; });
+
+            if (!respuesta.ok || !datos.success) {
+                throw new Error(datos.error || 'No se pudo completar la operación.');
+            }
+
+            if (modoEdicion) {
+                filaEditando.dataset.nombre = datos.nombre;
+                filaEditando.querySelector('.js-nombre').textContent = datos.nombre;
+                const fechaCelda = filaEditando.querySelector('.js-fecha');
+                if (fechaCelda && datos.fecha) fechaCelda.textContent = datos.fecha;
+                mostrarAlerta('Categoría actualizada correctamente.', 'success');
+                salirModoEdicion();
+            } else {
+                const nuevaFila = crearFila(datos);
+                tbody.insertBefore(nuevaFila, filaVacia);
+                reenumerar();
+                mostrarAlerta('Categoría agregada correctamente.', 'success');
+                salirModoEdicion();
+            }
+        } catch (error) {
+            mostrarAlerta(error.message || 'Ocurrió un error inesperado.', 'danger');
+        } finally {
+            btnSubmit.disabled = false;
+            btnSubmit.textContent = modoEdicion ? 'Actualizar' : 'Agregar';
+        }
+    }
+
+    async function manejarEliminar(fila, boton) {
+        const nombre = fila.dataset.nombre;
+        if (!window.confirm('¿Eliminar la categoría "' + nombre + '"?')) return;
+
+        boton.disabled = true;
+
+        try {
+            const respuesta = await fetch(fila.dataset.urlEliminar, {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+                credentials: 'same-origin',
+            });
+
+            const datos = await respuesta.json().catch(function () { return {}; });
+
+            if (!respuesta.ok || !datos.success) {
+                throw new Error(datos.error || 'No se pudo eliminar la categoría.');
+            }
+
+            if (filaEditando === fila) salirModoEdicion();
+            fila.remove();
+            reenumerar();
+            mostrarAlerta('Categoría eliminada correctamente.', 'success');
+        } catch (error) {
+            boton.disabled = false;
+            mostrarAlerta(error.message || 'Ocurrió un error inesperado.', 'danger');
+        }
+    }
+
+    form.addEventListener('submit', manejarEnvio);
+    btnCancelar.addEventListener('click', salirModoEdicion);
+
+    tbody.addEventListener('click', function (evento) {
+        const btnEditar = evento.target.closest('.btn-editar');
+        if (btnEditar) {
+            const fila = btnEditar.closest('tr[data-id]');
+            if (fila) entrarModoEdicion(fila);
+            return;
+        }
+
+        const btnEliminar = evento.target.closest('.btn-eliminar');
+        if (btnEliminar) {
+            const fila = btnEliminar.closest('tr[data-id]');
+            if (fila) manejarEliminar(fila, btnEliminar);
+        }
+    });
+
+    reenumerar();
+})();
+</script>
+{% endblock extra_js %}
