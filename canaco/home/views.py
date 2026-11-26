@@ -32,15 +32,47 @@ def guardar_archivo(upload, user):
 
 # Create your views here.
 def index(request):
-    publicaciones = Publicacion.objects.filter(
+    publicaciones_qs = Publicacion.objects.filter(
         estado=Publicacion.ESTADO_PUBLICADO,
-    ).select_related('categoria', 'autor', 'imagen_portada').order_by('-createdat')
-    
+    ).select_related('categoria', 'autor', 'imagen_portada').order_by('-createdat', '-pk')
+
     modal_promocional = ModalPromocional.objects.filter(activo=True).select_related('imagen').first()
 
+    listado = list(publicaciones_qs)
+
+    principal = listado[0] if listado else None
+    ticker_noticias = listado[:4]
+    # Columnas derechas del hero: 2.ª y 3.ª noticia más recientes
+    laterales = listado[1:3]
+    # Miniaturas bajo la noticia principal: siguientes noticias (4.ª en adelante)
+    secundarias = listado[3:7]
+
+    ids_destacados = {noticia.pk for noticia in listado[:7]}
+
+    agrupados = {}
+    for noticia in listado:
+        if noticia.pk in ids_destacados:
+            continue
+        agrupados.setdefault(noticia.categoria_id or 0, []).append(noticia)
+
+    secciones = []
+    for categoria in Categoria.objects.all().order_by('nombre'):
+        articulos = agrupados.get(categoria.pk, [])[:4]
+        if articulos:
+            secciones.append({'categoria': categoria, 'publicaciones': articulos})
+
+    if agrupados.get(0):
+        secciones.append({'categoria': None, 'publicaciones': agrupados[0][:4]})
+
     return render(request, 'home/index.html', {
-        'slider': publicaciones[:3],
-        'publicaciones': publicaciones[:3],
+        'slider': listado[:3],
+        'publicaciones': listado[:3],
+        'principal': principal,
+        'ticker_noticias': ticker_noticias,
+        'secundarias': secundarias,
+        'laterales': laterales,
+        'secciones': secciones,
+        'fecha_actual': timezone.localdate(),
         'modal_promocional': modal_promocional,
     })
 

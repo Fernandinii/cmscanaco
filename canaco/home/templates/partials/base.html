@@ -8,12 +8,12 @@
     <link rel="shortcut icon" href="{% static 'favicon.png' %}">
 
     <meta name="description" content="Portal de Noticias y CMS - Canaco" />
-    <meta name="keywords" content="noticias, cms, django, bootstrap, medium, verge" />
+    <meta name="keywords" content="noticias, cms, django, bootstrap, canaco" />
 
-    <!-- Google Fonts: Inter & Source Serif 4 (Medium / The Verge Style) -->
+    <!-- Google Fonts: Inter & Source Serif 4 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="{% static 'fonts/icomoon/style.css' %}">
     <link rel="stylesheet" href="{% static 'fonts/flaticon/font/flaticon.css' %}">
@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="{% static 'css/glightbox.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/flatpickr.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/magazine.css' %}">
 
     <style>
         :root {
@@ -31,9 +32,9 @@
             --bs-serif-font: 'Source Serif 4', Georgia, serif;
             --bs-primary: #111111 !important;
             --bs-primary-rgb: 17, 17, 17 !important;
-            --bs-danger: #111111 !important;
-            --bs-danger-rgb: 17, 17, 17 !important;
-            --bs-accent: #029835;
+            --bs-danger: #e74c3c !important;
+            --bs-danger-rgb: 231, 76, 60 !important;
+            --bs-accent: #e74c3c;
             --bs-body-color: #222222;
             --bs-body-bg: #FAFAFA;
         }
@@ -62,46 +63,25 @@
             border-color: #D1D5DB;
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
         }
-        .site-nav {
-            background-color: #FFFFFF !important;
-            border-bottom: 1px solid #E5E7EB;
-            box-shadow: none !important;
-        }
-        .site-nav a, .site-nav .site-navigation .site-menu > li > a {
-            color: #111111 !important;
-        }
-        .site-nav .site-navigation .site-menu > li > a:hover,
-        .site-nav .site-navigation .site-menu > li.active > a {
-            color: #000000 !important;
-        }
-        .site-footer {
-            background-color: #111111 !important;
-            color: #9CA3AF;
-        }
-        .site-footer .heading {
-            color: #FFFFFF !important;
-        }
-        .btn-primary {
-            background-color: #111111;
-            border-color: #111111;
-        }
-        .btn-primary:hover {
-            background-color: #000000;
-            border-color: #000000;
-        }
         .badge-accent {
-            background-color: #029835;
+            background-color: #e74c3c;
             color: #ffffff;
         }
-        *:focus, *:active, .btn:focus, .btn:active, .form-control:focus {
-            border-color: #111111 !important;
-            box-shadow: 0 0 0 0.2rem rgba(17, 17, 17, 0.15) !important;
+        *:focus, *:active, *:focus-visible,
+        .btn:focus, .btn:active, .form-control:focus,
+        a:focus, a:focus-visible,
+        button:focus, button:focus-visible,
+        input:focus, select:focus, textarea:focus,
+        .dropdown-item:focus, .nav-link:focus {
+            outline: none !important;
+            box-shadow: none !important;
         }
     </style>
 
+    {% block extra_head %}{% endblock %}
     <title>{% block title %}Canaco - Digital News{% endblock %}</title>
 </head>
-<body>
+<body class="{% block body_class %}{% endblock %}">
 
     {% include 'partials/header.html' %}
 
@@ -114,7 +94,7 @@
 
     <div id="overlayer"></div>
     <div class="loader">
-        <div class="spinner-border text-dark" role="status">
+        <div class="spinner-border text-danger" role="status">
             <span class="visually-hidden">Cargando...</span>
         </div>
     </div>
@@ -127,5 +107,6 @@
     <script src="{% static 'js/navbar.js' %}"></script>
     <script src="{% static 'js/counter.js' %}"></script>
     <script src="{% static 'js/custom.js' %}"></script>
+    {% block extra_js %}{% endblock %}
 </body>
 </html>

@@ -1,179 +1,255 @@
 {% extends 'partials/base.html' %}
 {% load static %}
-{% block title %}Canaco - Digital News & Stories{% endblock %}
+{% block title %}CANACO - Noticias & Negocios{% endblock %}
+{% block body_class %}magazine-body{% endblock %}
 
 {% block content %}
-  {% if slider %}
-    <!-- Hero / Featured Digital Native Section -->
-    <section class="container my-4">
-      <div class="row g-4 align-items-stretch">
-        <!-- Main Hero Article (First item in slider) -->
-        {% with principal=slider.0 %}
-          <div class="col-lg-8">
-            <div class="card bg-white border rounded-4 overflow-hidden shadow-sm h-100 position-relative d-flex flex-column">
-              <div class="position-relative overflow-hidden" style="max-height: 380px; min-height: 320px;">
-                {% if principal.imagen_portada %}
-                  <img src="{{ principal.imagen_portada.display_url }}" class="w-100 h-100 object-fit-cover" alt="{{ principal.titulo }}">
-                {% else %}
-                  <img src="{% static 'images/hero_1.jpg' %}" class="w-100 h-100 object-fit-cover" alt="{{ principal.titulo }}">
-                {% endif %}
-                <div class="position-absolute top-0 start-0 m-3">
-                  {% if principal.categoria %}
-                    <span class="badge bg-dark text-white px-3 py-1 rounded-pill fw-semibold" style="font-size: 11px;">{{ principal.categoria.nombre }}</span>
-                  {% endif %}
-                </div>
-              </div>
-              
-              <div class="card-body p-4 p-lg-5 d-flex flex-column justify-content-between bg-white">
-                <div>
-                  <div class="d-flex align-items-center text-muted small mb-2 gap-3">
-                    <span><i class="bi bi-calendar3 me-1"></i>{{ principal.createdat|date:"d M, Y" }}</span>
-                    <span><i class="bi bi-eye me-1"></i>{{ principal.visitas }} lecturas</span>
-                  </div>
-                  <h1 class="card-title h2 fw-bold mb-3" style="letter-spacing: -0.03em; line-height: 1.25;">
-                    <a href="{% url 'home:noticia_detalle' principal.id %}" class="text-dark text-decoration-none stretched-link">{{ principal.titulo }}</a>
-                  </h1>
-                  {% if principal.resumen %}
-                    <p class="card-text text-secondary article-serif fs-5 mb-4" style="line-height: 1.7;">{{ principal.resumen|truncatewords:22 }}</p>
-                  {% endif %}
-                </div>
-                <div class="d-flex align-items-center pt-3 border-top">
-                  <span class="text-dark small fw-bold">Leer historia completa <i class="bi bi-arrow-right ms-1"></i></span>
-                </div>
-              </div>
-            </div>
-          </div>
-        {% endwith %}
 
-        <!-- Secondary Side Stories (Medium / Verge style list) -->
-        <div class="col-lg-4">
-          <div class="card bg-white border rounded-4 p-4 h-100 d-flex flex-column justify-content-between shadow-sm">
-            <div>
-              <h3 class="h6 text-uppercase fw-extrabold text-muted tracking-widest mb-4 pb-2 border-bottom">Destacadas del día</h3>
-              <div class="d-flex flex-column gap-4">
-                {% for noticia in slider %}
-                  {% if not forloop.first %}
-                    <div class="pb-3 border-bottom position-relative">
-                      <div class="d-flex align-items-center justify-content-between mb-1">
-                        <span class="badge bg-light text-dark border px-2 py-0.5" style="font-size: 10px;">{% if noticia.categoria %}{{ noticia.categoria.nombre }}{% else %}General{% endif %}</span>
-                        <small class="text-muted" style="font-size: 11px;">{{ noticia.createdat|date:"d M" }}</small>
-                      </div>
-                      <h4 class="h6 mb-0 fw-bold" style="line-height: 1.4;">
-                        <a href="{% url 'home:noticia_detalle' noticia.id %}" class="text-dark text-decoration-none stretched-link">{{ noticia.titulo|truncatechars:65 }}</a>
-                      </h4>
+    {% if principal %}
+        <!-- ===================== Hero principal ===================== -->
+        <section class="magazine-hero">
+            <div class="container">
+                <div class="row g-4">
+
+                    <!-- Columna izquierda: noticia principal + miniaturas -->
+                    <div class="col-lg-7">
+                        <article class="hero-feature">
+                            <a href="{% url 'home:noticia_detalle' principal.id %}" class="hero-feature-media">
+                                {% if principal.imagen_portada %}
+                                    <img src="{{ principal.imagen_portada.display_url }}" alt="{{ principal.titulo }}">
+                                {% else %}
+                                    <img src="{% static 'images/hero_1.jpg' %}" alt="{{ principal.titulo }}">
+                                {% endif %}
+                                <span class="hero-feature-overlay"></span>
+                                <span class="hero-feature-content">
+                                    {% if principal.categoria %}
+                                        <span class="hero-cat">{{ principal.categoria.nombre }}</span>
+                                    {% else %}
+                                        <span class="hero-cat">General</span>
+                                    {% endif %}
+                                    <h1 class="hero-title">{{ principal.titulo }}</h1>
+                                    {% if principal.resumen %}
+                                        <p class="hero-excerpt">{{ principal.resumen|truncatewords:26 }}</p>
+                                    {% endif %}
+                                    <span class="hero-meta">
+                                        <span><i class="bi bi-calendar3"></i>{{ principal.createdat|date:"d M Y" }}</span>
+                                        <span><i class="bi bi-eye"></i>{{ principal.visitas }} lecturas</span>
+                                        {% if principal.autor %}
+                                            <span><i class="bi bi-person"></i>{{ principal.autor.username }}</span>
+                                        {% endif %}
+                                    </span>
+                                </span>
+                            </a>
+                        </article>
+
+                        {% if secundarias %}
+                            <div class="hero-thumbs">
+                                {% for noticia in secundarias %}
+                                    <a href="{% url 'home:noticia_detalle' noticia.id %}" class="hero-thumb">
+                                        <span class="hero-thumb-media">
+                                            {% if noticia.imagen_portada %}
+                                                <img src="{{ noticia.imagen_portada.display_url }}" alt="{{ noticia.titulo }}">
+                                            {% else %}
+                                                <img src="{% static 'images/img_1_horizontal.jpg' %}" alt="{{ noticia.titulo }}">
+                                            {% endif %}
+                                            {% if noticia.categoria %}
+                                                <span class="hero-thumb-cat">{{ noticia.categoria.nombre }}</span>
+                                            {% endif %}
+                                        </span>
+                                        <span class="hero-thumb-title">{{ noticia.titulo|truncatechars:52 }}</span>
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                     </div>
-                  {% endif %}
-                {% endfor %}
-              </div>
-            </div>
-            <div class="mt-4 pt-3 text-center border-top">
-              <a href="{% url 'home:categoria' %}" class="text-dark text-decoration-none small fw-bold">Ver archivo completo <i class="bi bi-chevron-right ms-1"></i></a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  {% endif %}
 
-  <!-- Recent Stories Stream -->
-  <section class="container my-5">
-    <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
-      <div>
-        <h2 class="h3 fw-bold mb-1" style="letter-spacing: -0.02em;">Últimas Historias</h2>
-        <p class="text-muted small mb-0">Artículos y reportajes publicados recientemente</p>
-      </div>
-      <a href="{% url 'home:categoria' %}" class="btn btn-outline-dark btn-sm rounded-pill px-4 fw-semibold">Explorar todas</a>
+                    <!-- Columna derecha: dos tarjetas apiladas -->
+                    <div class="col-lg-5">
+                        <div class="hero-side">
+                            {% for noticia in laterales %}
+                                <a href="{% url 'home:noticia_detalle' noticia.id %}" class="hero-side-card">
+                                    {% if noticia.imagen_portada %}
+                                        <img src="{{ noticia.imagen_portada.display_url }}" alt="{{ noticia.titulo }}">
+                                    {% else %}
+                                        <img src="{% static 'images/img_3_horizontal.jpg' %}" alt="{{ noticia.titulo }}">
+                                    {% endif %}
+                                    <span class="hero-side-overlay"></span>
+                                    <span class="hero-side-content">
+                                        {% if noticia.categoria %}
+                                            <span class="hero-side-cat">{{ noticia.categoria.nombre }}</span>
+                                        {% else %}
+                                            <span class="hero-side-cat">General</span>
+                                        {% endif %}
+                                        <span class="hero-side-title">{{ noticia.titulo }}</span>
+                                        <span class="hero-side-meta"><i class="bi bi-calendar3 me-1"></i>{{ noticia.createdat|date:"d M Y" }}</span>
+                                    </span>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================== Secciones por categoría ===================== -->
+        {% for seccion in secciones %}
+            <section class="magazine-category-section">
+                <div class="container">
+                    <div class="magazine-section-head">
+                        <h2 class="magazine-section-title">
+                            {% if seccion.categoria %}{{ seccion.categoria.nombre }}{% else %}General{% endif %}
+                        </h2>
+                        <a class="magazine-section-link"
+                           href="{% if seccion.categoria %}{% url 'home:categoria_detalle' seccion.categoria.id %}{% else %}{% url 'home:categoria' %}{% endif %}">
+                            Ver todo <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <div class="row g-4">
+                        {% with lead=seccion.publicaciones.0 %}
+                            <div class="col-lg-5">
+                                <article class="magazine-lead-card">
+                                    <a href="{% url 'home:noticia_detalle' lead.id %}" class="magazine-lead-media">
+                                        {% if lead.imagen_portada %}
+                                            <img src="{{ lead.imagen_portada.display_url }}" alt="{{ lead.titulo }}">
+                                        {% else %}
+                                            <img src="{% static 'images/img_5_horizontal.jpg' %}" alt="{{ lead.titulo }}">
+                                        {% endif %}
+                                    </a>
+                                    <h3 class="magazine-lead-title">
+                                        <a href="{% url 'home:noticia_detalle' lead.id %}">{{ lead.titulo }}</a>
+                                    </h3>
+                                    <div class="magazine-meta">
+                                        <span><i class="bi bi-calendar3"></i>{{ lead.createdat|date:"d M Y" }}</span>
+                                        <span><i class="bi bi-eye"></i>{{ lead.visitas }} lecturas</span>
+                                    </div>
+                                    {% if lead.resumen %}
+                                        <p class="magazine-lead-excerpt">{{ lead.resumen|truncatewords:20 }}</p>
+                                    {% endif %}
+                                    <a href="{% url 'home:noticia_detalle' lead.id %}" class="magazine-read-more">
+                                        Leer más <i class="bi bi-arrow-right"></i>
+                                    </a>
+                                </article>
+                            </div>
+                        {% endwith %}
+
+                        <div class="col-lg-7">
+                            <div class="magazine-list">
+                                {% for noticia in seccion.publicaciones|slice:"1:" %}
+                                    <a href="{% url 'home:noticia_detalle' noticia.id %}" class="magazine-list-item">
+                                        <span class="magazine-list-thumb">
+                                            {% if noticia.imagen_portada %}
+                                                <img src="{{ noticia.imagen_portada.display_url }}" alt="{{ noticia.titulo }}">
+                                            {% else %}
+                                                <img src="{% static 'images/img_4_horizontal.jpg' %}" alt="{{ noticia.titulo }}">
+                                            {% endif %}
+                                        </span>
+                                        <span class="magazine-list-body">
+                                            <span class="magazine-list-cat">
+                                                {% if noticia.categoria %}{{ noticia.categoria.nombre }}{% else %}General{% endif %}
+                                            </span>
+                                            <span class="magazine-list-title">{{ noticia.titulo }}</span>
+                                            <span class="magazine-meta">
+                                                <span><i class="bi bi-calendar3"></i>{{ noticia.createdat|date:"d M Y" }}</span>
+                                                <span><i class="bi bi-eye"></i>{{ noticia.visitas }}</span>
+                                            </span>
+                                        </span>
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        {% empty %}
+            <!-- Fallback cuando aún no existen suficientes noticias para agrupar -->
+            <section class="magazine-category-section">
+                <div class="container">
+                    <div class="magazine-section-head">
+                        <h2 class="magazine-section-title">Últimas historias</h2>
+                        <a class="magazine-section-link" href="{% url 'home:categoria' %}">Ver todo <i class="bi bi-arrow-right"></i></a>
+                    </div>
+                    <div class="row g-4">
+                        {% for noticia in publicaciones %}
+                            <div class="col-lg-4 col-md-6">
+                                <article class="magazine-lead-card is-compact">
+                                    <a href="{% url 'home:noticia_detalle' noticia.id %}" class="magazine-lead-media">
+                                        {% if noticia.imagen_portada %}
+                                            <img src="{{ noticia.imagen_portada.display_url }}" alt="{{ noticia.titulo }}">
+                                        {% else %}
+                                            <img src="{% static 'images/img_1_horizontal.jpg' %}" alt="{{ noticia.titulo }}">
+                                        {% endif %}
+                                    </a>
+                                    <div class="magazine-meta">
+                                        <span><i class="bi bi-calendar3"></i>{{ noticia.createdat|date:"d M Y" }}</span>
+                                        <span><i class="bi bi-eye"></i>{{ noticia.visitas }}</span>
+                                    </div>
+                                    <h3 class="magazine-lead-title">
+                                        <a href="{% url 'home:noticia_detalle' noticia.id %}">{{ noticia.titulo }}</a>
+                                    </h3>
+                                    <a href="{% url 'home:noticia_detalle' noticia.id %}" class="magazine-read-more">
+                                        Leer más <i class="bi bi-arrow-right"></i>
+                                    </a>
+                                </article>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </section>
+        {% endfor %}
+
+    {% else %}
+        <section class="magazine-hero">
+            <div class="container">
+                <div class="magazine-empty">
+                    <i class="bi bi-journal-x"></i>
+                    <h2 class="h4 mb-2">No hay publicaciones todavía</h2>
+                    <p class="mb-0">Vuelve pronto para descubrir nuevas historias de CANACO.</p>
+                </div>
+            </div>
+        </section>
+    {% endif %}
+
+    <!-- ===================== Modal Promocional (lógica intacta) ===================== -->
+    {% if modal_promocional and modal_promocional.activo %}
+    <div class="modal fade" id="promotionalModal" tabindex="-1" aria-labelledby="promotionalModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 420px;">
+            <div class="modal-content border-0 rounded-4 overflow-hidden shadow-lg">
+                <div class="modal-header border-0 bg-dark text-white pb-2">
+                    <h5 class="modal-title fw-bold fs-6" id="promotionalModalLabel">{{ modal_promocional.titulo }}</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4 bg-white text-center">
+                    <div class="d-flex flex-column align-items-center">
+                        {% if modal_promocional.imagen %}
+                        <div class="w-100 mb-3 overflow-hidden rounded-3 bg-light" style="max-height: 350px;">
+                            <img src="{{ modal_promocional.imagen.display_url }}" alt="{{ modal_promocional.titulo }}" class="img-fluid w-100 h-100 object-fit-cover" style="max-height: 350px; object-fit: contain;">
+                        </div>
+                        {% endif %}
+                        {% if modal_promocional.etiqueta %}
+                        <span class="badge badge-accent mb-2 px-3 py-1 rounded-pill fw-semibold" style="font-size: 11px;">{{ modal_promocional.etiqueta }}</span>
+                        {% endif %}
+                        <h3 class="h4 fw-bold mb-3" style="line-height: 1.3;">{{ modal_promocional.titulo }}</h3>
+                        {% if modal_promocional.descripcion %}
+                        <p class="text-secondary small mb-4" style="line-height: 1.6;">{{ modal_promocional.descripcion|linebreaksbr }}</p>
+                        {% endif %}
+                        <div class="d-grid w-100">
+                            <button type="button" class="btn btn-dark py-2 fw-semibold" data-bs-dismiss="modal">¡Entendido!</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="row g-4">
-      {% for noticia in publicaciones %}
-        <div class="col-lg-4 col-md-6">
-          <div class="card h-100 bg-white border rounded-4 overflow-hidden shadow-sm d-flex flex-column">
-            <div class="position-relative overflow-hidden" style="height: 210px;">
-              {% if noticia.imagen_portada %}
-                <img src="{{ noticia.imagen_portada.display_url }}" alt="{{ noticia.titulo }}" class="w-100 h-100 object-fit-cover">
-              {% else %}
-                <img src="{% static 'images/img_1_horizontal.jpg' %}" alt="{{ noticia.titulo }}" class="w-100 h-100 object-fit-cover">
-              {% endif %}
-              <div class="position-absolute top-0 start-0 m-3">
-                <span class="badge bg-white text-dark border shadow-xs px-3 py-1 rounded-pill fw-semibold" style="font-size: 11px;">
-                  {% if noticia.categoria %}{{ noticia.categoria.nombre }}{% else %}General{% endif %}
-                </span>
-              </div>
-            </div>
-
-            <div class="card-body d-flex flex-column p-4">
-              <div class="d-flex align-items-center text-muted small mb-2 gap-3">
-                <span><i class="bi bi-calendar3 me-1"></i>{{ noticia.createdat|date:"d M Y" }}</span>
-                <span><i class="bi bi-eye me-1"></i>{{ noticia.visitas }} visitas</span>
-              </div>
-
-              <h3 class="h5 fw-bold mb-3" style="line-height: 1.35; letter-spacing: -0.01em;">
-                <a href="{% url 'home:noticia_detalle' noticia.id %}" class="text-dark text-decoration-none stretched-link">{{ noticia.titulo }}</a>
-              </h3>
-
-              <p class="text-secondary small article-serif mb-4" style="line-height: 1.6;">{{ noticia.resumen|truncatechars:115 }}</p>
-
-              <div class="mt-auto pt-3 border-top d-flex justify-content-between align-items-center">
-                <span class="text-dark small fw-bold">Leer artículo</span>
-                {% if noticia.autor %}
-                  <span class="text-muted small font-monospace">Por {{ noticia.autor.username }}</span>
-                {% endif %}
-              </div>
-            </div>
-          </div>
-        </div>
-      {% empty %}
-        <div class="col-12 text-center py-5">
-          <div class="p-5 bg-white border rounded-4 shadow-sm">
-            <i class="bi bi-journal-x fs-1 text-muted mb-3 d-block"></i>
-            <h3 class="h5 text-dark">No hay publicaciones todavía</h3>
-            <p class="text-muted small">Vuelve pronto para descubrir nuevas historias.</p>
-          </div>
-        </div>
-      {% endfor %}
-    </div>
-  </section>
-
-  <!-- Modal Promocional Vertical para la página principal -->
-  {% if modal_promocional and modal_promocional.activo %}
-  <div class="modal fade" id="promotionalModal" tabindex="-1" aria-labelledby="promotionalModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" style="max-width: 420px;">
-          <div class="modal-content border-0 rounded-4 overflow-hidden shadow-lg">
-              <div class="modal-header border-0 bg-dark text-white pb-2">
-                  <h5 class="modal-title fw-bold fs-6" id="promotionalModalLabel">{{ modal_promocional.titulo }}</h5>
-                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body p-4 bg-white text-center">
-                  <div class="d-flex flex-column align-items-center">
-                      {% if modal_promocional.imagen %}
-                      <div class="w-100 mb-3 overflow-hidden rounded-3 bg-light" style="max-height: 350px;">
-                          <img src="{{ modal_promocional.imagen.display_url }}" alt="{{ modal_promocional.titulo }}" class="img-fluid w-100 h-100 object-fit-cover" style="max-height: 350px; object-fit: contain;">
-                      </div>
-                      {% endif %}
-                      {% if modal_promocional.etiqueta %}
-                      <span class="badge badge-accent mb-2 px-3 py-1 rounded-pill fw-semibold" style="font-size: 11px;">{{ modal_promocional.etiqueta }}</span>
-                      {% endif %}
-                      <h3 class="h4 fw-bold mb-3" style="line-height: 1.3;">{{ modal_promocional.titulo }}</h3>
-                      {% if modal_promocional.descripcion %}
-                      <p class="text-secondary small mb-4" style="line-height: 1.6;">{{ modal_promocional.descripcion|linebreaksbr }}</p>
-                      {% endif %}
-                      <div class="d-grid w-100">
-                          <button type="button" class="btn btn-dark py-2 fw-semibold" data-bs-dismiss="modal">¡Entendido!</button>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </div>
-
-  <!-- Script para mostrar el modal automáticamente al cargar o recargar la página principal -->
-  <script>
-      document.addEventListener("DOMContentLoaded", function() {
-          var promoModal = new bootstrap.Modal(document.getElementById('promotionalModal'));
-          promoModal.show();
-      });
-  </script>
-  {% endif %}
+    <!-- Script para mostrar el modal automáticamente al cargar o recargar la página principal -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var promoModal = new bootstrap.Modal(document.getElementById('promotionalModal'));
+            promoModal.show();
+        });
+    </script>
+    {% endif %}
 
 {% endblock content %}

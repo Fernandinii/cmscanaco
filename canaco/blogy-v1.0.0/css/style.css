@@ -2704,7 +2704,7 @@ textarea.form-control-lg {
       box-shadow: 0 0 0 0.25rem rgba(225, 83, 97, 0.5); }
   .btn-danger:disabled, .btn-danger.disabled {
     color: #fff;
-    background-color: #dc3545;
+    background-color: #ffffff;
     border-color: #dc3545; }
 
 .btn-light {
